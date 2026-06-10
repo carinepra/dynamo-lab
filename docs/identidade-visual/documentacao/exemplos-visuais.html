@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identidade Visual da Aurora Labs - Exemplos</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Cores Principais */
+            --navy-40: #002740;
+            --aqua-20: #67d2df;
+            --yellow-10: #f9e27d;
+            
+            /* Semânticas */
+            --success: #789d4a;
+            --error: #f94f48;
+            --warning: #ddc35f;
+            --info: #3c70c1;
+            
+            /* Neutros */
+            --white: #ffffff;
+            --neutral-10: #e1e9ec;
+            --neutral-20: #abbdc8;
+            --neutral-30: #546c7e;
+            --neutral-40: #253746;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Rubik', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--neutral-30);
+            background: #f5f7f9;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        }
+
+        h1 {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            margin-bottom: 8px;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            margin: 40px 0 24px;
+            padding-bottom: 16px;
+            border-bottom: 2px solid var(--neutral-10);
+        }
+
+        h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-40);
+            margin: 24px 0 16px;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--neutral-30);
+            margin-bottom: 40px;
+        }
+
+        /* Grid de Cores */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        .color-item {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid var(--neutral-10);
+        }
+
+        .color-swatch {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
+            font-size: 14px;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .color-info {
+            padding: 12px;
+            background: white;
+        }
+
+        .color-name {
+            font-weight: 500;
+            color: var(--neutral-40);
+            margin-bottom: 4px;
+        }
+
+        .color-hex {
+            font-size: 14px;
+            color: var(--neutral-30);
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .btn {
+            font-family: 'Rubik', sans-serif;
+            font-weight: 700;
+            font-size: 16px;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(.72,.04,.16,.97);
+        }
+
+        .btn--primary {
+            background: var(--navy-40);
+            color: white;
+        }
+
+        .btn--primary:hover {
+            background: #124666;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 39, 64, 0.3);
+        }
+
+        .btn--secondary {
+            background: white;
+            color: var(--navy-40);
+            border: 2px solid var(--navy-40);
+        }
+
+        .btn--secondary:hover {
+            background: #e6f7ff;
+        }
+
+        .btn--cta {
+            background: var(--yellow-10);
+            color: var(--navy-40);
+        }
+
+        .btn--cta:hover {
+            background: var(--warning);
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .card {
+            background: white;
+            border: 1px solid var(--neutral-10);
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+        }
+
+        .card__title {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--neutral-40);
+            margin-bottom: 8px;
+        }
+
+        .card__description {
+            font-size: 14px;
+            color: var(--neutral-30);
+            margin-bottom: 16px;
+        }
+
+        /* Alerts */
+        .alert-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .alert {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .alert--success {
+            background: #e8ebc0;
+            border-left: 4px solid var(--success);
+            color: #357320;
+        }
+
+        .alert--error {
+            background: #ffe6e6;
+            border-left: 4px solid var(--error);
+            color: #82110f;
+        }
+
+        .alert--warning {
+            background: #fff7e6;
+            border-left: 4px solid var(--warning);
+            color: #886B1D;
+        }
+
+        .alert--info {
+            background: #bedef3;
+            border-left: 4px solid var(--info);
+            color: #163694;
+        }
+
+        /* Tipografia */
+        .type-example {
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .type-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--neutral-30);
+            margin-bottom: 8px;
+        }
+
+        /* Formulário */
+        .form-example {
+            max-width: 500px;
+            margin-bottom: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            font-size: 14px;
+            color: var(--neutral-40);
+            margin-bottom: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            font-family: 'Rubik', sans-serif;
+            font-size: 16px;
+            padding: 12px 16px;
+            border: 1px solid var(--neutral-20);
+            border-radius: 8px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--info);
+            box-shadow: 0 0 0 3px rgba(60, 112, 193, 0.1);
+        }
+
+        .form-helper {
+            font-size: 12px;
+            color: var(--neutral-20);
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Identidade Visual da Aurora Labs</h1>
+        <p class="subtitle">Exemplos visuais extraídos do Aurora Labs Design System</p>
+
+        <!-- Cores Principais -->
+        <h2>Cores Principais</h2>
+        <div class="color-grid">
+            <div class="color-item">
+                <div class="color-swatch" style="background: #002740;">Navy 40</div>
+                <div class="color-info">
+                    <div class="color-name">Navy 40 ⭐</div>
+                    <div class="color-hex">#002740</div>
+                </div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #67d2df;">Aqua 20</div>
+                <div class="color-info">
+                    <div class="color-name">Aqua 20</div>
+                    <div class="color-hex">#67d2df</div>
+                </div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #f9e27d; color: #002740;">Yellow 10</div>
+                <div class="color-info">
+                    <div class="color-name">Yellow 10 ⭐</div>
+                    <div class="color-hex">#f9e27d</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cores Semânticas -->
+        <h2>Cores Semânticas</h2>
+        <div class="color-grid">
+            <div class="color-item">
+                <div class="color-swatch" style="background: #789d4a;">✓ Success</div>
+                <div class="color-info">
+                    <div class="color-name">Success</div>
+                    <div class="color-hex">#789d4a</div>
+                </div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #f94f48;">✕ Error</div>
+                <div class="color-info">
+                    <div class="color-name">Error</div>
+                    <div class="color-hex">#f94f48</div>
+                </div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #ddc35f; color: #002740;">! Warning</div>
+                <div class="color-info">
+                    <div class="color-name">Warning</div>
+                    <div class="color-hex">#ddc35f</div>
+                </div>
+            </div>
+            <div class="color-item">
+                <div class="color-swatch" style="background: #3c70c1;">ℹ Info</div>
+                <div class="color-info">
+                    <div class="color-name">Info</div>
+                    <div class="color-hex">#3c70c1</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tipografia -->
+        <h2>Tipografia - Rubik</h2>
+        <div class="type-example">
+            <div class="type-label">H1 - 48px Bold</div>
+            <h1>Título Principal</h1>
+        </div>
+        <div class="type-example">
+            <div class="type-label">H2 - 32px Bold</div>
+            <h2 style="margin: 0; border: none;">Título Secundário</h2>
+        </div>
+        <div class="type-example">
+            <div class="type-label">Body - 16px Regular</div>
+            <p>Este é um parágrafo de exemplo usando a fonte Rubik em peso regular (400). A Aurora Labs utiliza esta tipografia em todo o seu ecossistema de produtos.</p>
+        </div>
+
+        <!-- Botões -->
+        <h2>Botões</h2>
+        <div class="button-group">
+            <button class="btn btn--primary">Botão Primário</button>
+            <button class="btn btn--secondary">Botão Secundário</button>
+            <button class="btn btn--cta">Call to Action</button>
+        </div>
+
+        <!-- Cards -->
+        <h2>Cards</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3 class="card__title">Card de Exemplo</h3>
+                <p class="card__description">Este é um exemplo de card seguindo o design system da Aurora Labs. Hover para ver o efeito.</p>
+                <button class="btn btn--primary">Ação Principal</button>
+            </div>
+            <div class="card">
+                <h3 class="card__title">Outro Card</h3>
+                <p class="card__description">Cards são elementos fundamentais para organizar conteúdo de forma visual e hierárquica.</p>
+                <button class="btn btn--secondary">Saiba Mais</button>
+            </div>
+            <div class="card">
+                <h3 class="card__title">Terceiro Card</h3>
+                <p class="card__description">Utilize cards para destacar informações importantes e criar uma interface mais amigável.</p>
+                <button class="btn btn--cta">Começar</button>
+            </div>
+        </div>
+
+        <!-- Alertas -->
+        <h2>Alertas e Feedbacks</h2>
+        <div class="alert-grid">
+            <div class="alert alert--success">
+                ✓ Operação realizada com sucesso!
+            </div>
+            <div class="alert alert--error">
+                ✕ Erro ao processar a solicitação.
+            </div>
+            <div class="alert alert--warning">
+                ! Atenção: Esta ação não pode ser desfeita.
+            </div>
+            <div class="alert alert--info">
+                ℹ Informação importante para o usuário.
+            </div>
+        </div>
+
+        <!-- Formulário -->
+        <h2>Formulários</h2>
+        <div class="form-example">
+            <div class="form-group">
+                <label class="form-label">Nome completo</label>
+                <input type="text" class="form-input" placeholder="Digite seu nome">
+                <small class="form-helper">Informe seu nome completo</small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">E-mail</label>
+                <input type="email" class="form-input" placeholder="seu@email.com">
+                <small class="form-helper">Usaremos para contato</small>
+            </div>
+            <button class="btn btn--primary">Enviar</button>
+        </div>
+
+        <!-- Rodapé -->
+        <hr style="border: none; border-top: 1px solid var(--neutral-10); margin: 40px 0;">
+        <p style="text-align: center; color: var(--neutral-20); font-size: 14px;">
+            Identidade Visual da Aurora Labs © 2025<br>
+            Extraída do <a href="https://auroralabs.example/design-system/" style="color: var(--info);">Aurora Labs Design System</a>
+        </p>
+    </div>
+</body>
+</html>
+

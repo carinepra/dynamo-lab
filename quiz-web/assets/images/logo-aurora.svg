@@ -1,0 +1,19 @@
+<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aurora Labs">
+  <defs>
+    <linearGradient id="aurora-mark" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67d2df"/>
+      <stop offset="0.55" stop-color="#f9e27d"/>
+      <stop offset="1" stop-color="#789d4a"/>
+    </linearGradient>
+    <linearGradient id="aurora-glow" x1="10" y1="34" x2="38" y2="12" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#67d2df" stop-opacity="0.15"/>
+      <stop offset="1" stop-color="#67d2df" stop-opacity="0.75"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="4" width="40" height="40" rx="14" fill="#002740"/>
+  <path d="M10 32C15 20 20 12 25 10C23 18 29 24 38 32" stroke="url(#aurora-mark)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M13 34C20 28 27 26 36 29" stroke="url(#aurora-glow)" stroke-width="4" stroke-linecap="round"/>
+  <circle cx="31" cy="14" r="2.5" fill="#f9e27d"/>
+  <text x="52" y="29" font-family="Rubik, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="1.5" fill="#002740">AURORA</text>
+  <text x="54" y="41" font-family="Rubik, Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="4" fill="#546c7e">LABS</text>
+</svg>

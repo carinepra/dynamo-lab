@@ -1,0 +1,298 @@
+{
+  "name": "Aurora Labs",
+  "description": "Identidade Visual da Aurora Labs - Extraída do Aurora Labs Design System",
+  "version": "1.0.0",
+  "designSystem": {
+    "name": "Aurora Labs",
+    "url": "https://auroralabs.example/design-system/",
+    "repository": "Aurora Labs/aurora-labs-design"
+  },
+  "typography": {
+    "primary": {
+      "family": "Rubik",
+      "weights": [400, 500, 700],
+      "fallback": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif",
+      "files": {
+        "regular": "rubik-v18-latin-regular.woff2",
+        "medium": "rubik-v18-latin-500.woff2",
+        "bold": "rubik-v18-latin-700.woff2"
+      }
+    },
+    "sizes": {
+      "h1": { "desktop": "48px", "mobile": "32px", "weight": 700 },
+      "h2": { "desktop": "36px", "mobile": "24px", "weight": 700 },
+      "h3": { "desktop": "28px", "mobile": "20px", "weight": 700 },
+      "h4": { "desktop": "20px", "mobile": "18px", "weight": 500 },
+      "body": { "desktop": "16px", "mobile": "14px", "weight": 400 },
+      "small": { "desktop": "14px", "mobile": "12px", "weight": 400 },
+      "caption": { "desktop": "12px", "mobile": "10px", "weight": 400 }
+    }
+  },
+  "colors": {
+    "primary": {
+      "name": "Navy",
+      "brand": "#002740",
+      "shades": {
+        "0": "#e6f7ff",
+        "10": "#6095b3",
+        "20": "#336b8c",
+        "30": "#124666",
+        "40": "#002740"
+      },
+      "usage": "Cor principal da marca, botões primários, headers"
+    },
+    "secondary": {
+      "name": "Aqua",
+      "brand": "#67d2df",
+      "shades": {
+        "0": "#e6f9ff",
+        "10": "#b8e9f4",
+        "20": "#67d2df",
+        "30": "#4fb9c6",
+        "40": "#39a0ae"
+      },
+      "usage": "Cor secundária, destaques, elementos interativos"
+    },
+    "accent": {
+      "name": "Yellow",
+      "brand": "#f9e27d",
+      "shades": {
+        "0": "#fff7e6",
+        "10": "#f9e27d",
+        "20": "#ddc35f",
+        "30": "#c0a445",
+        "40": "#886B1D"
+      },
+      "usage": "CTAs, destaques, promoções"
+    },
+    "semantic": {
+      "success": {
+        "name": "Green",
+        "primary": "#789d4a",
+        "shades": {
+          "0": "#e8ebc0",
+          "10": "#b1c47e",
+          "20": "#789d4a",
+          "30": "#558833",
+          "40": "#357320"
+        }
+      },
+      "error": {
+        "name": "Red",
+        "primary": "#f94f48",
+        "shades": {
+          "0": "#ffe6e6",
+          "10": "#fda7a6",
+          "20": "#f94f48",
+          "30": "#d13630",
+          "40": "#82110f"
+        }
+      },
+      "warning": {
+        "name": "Yellow",
+        "primary": "#ddc35f",
+        "shades": {
+          "0": "#fff7e6",
+          "10": "#f9e27d",
+          "20": "#ddc35f",
+          "30": "#c0a445",
+          "40": "#886B1D"
+        }
+      },
+      "info": {
+        "name": "Blue",
+        "primary": "#3c70c1",
+        "shades": {
+          "0": "#bedef3",
+          "10": "#77a8da",
+          "20": "#3c70c1",
+          "30": "#2354b4",
+          "40": "#163694"
+        }
+      }
+    },
+    "neutral": {
+      "name": "Neutral",
+      "shades": {
+        "0": "#ffffff",
+        "10": "#e1e9ec",
+        "20": "#abbdc8",
+        "30": "#546c7e",
+        "40": "#253746"
+      },
+      "usage": "Textos, bordas, backgrounds"
+    },
+    "extended": {
+      "purple": {
+        "0": "#eee6ff",
+        "10": "#ccadff",
+        "20": "#a259ff",
+        "30": "#823cd6",
+        "40": "#491385"
+      },
+      "pink": {
+        "0": "#eedbe7",
+        "10": "#ddc2cf",
+        "20": "#b390a2",
+        "30": "#886479",
+        "40": "#5d3f51"
+      },
+      "brown": {
+        "0": "#edc8b5",
+        "10": "#ca8962",
+        "20": "#94450b",
+        "30": "#632b04",
+        "40": "#4b1f01"
+      }
+    }
+  },
+  "spacing": {
+    "unit": "8px",
+    "scale": {
+      "1": "8px",
+      "2": "16px",
+      "3": "24px",
+      "4": "32px",
+      "5": "40px",
+      "6": "48px",
+      "7": "56px",
+      "8": "64px",
+      "9": "72px",
+      "10": "80px"
+    }
+  },
+  "layout": {
+    "containerWidth": "1366px",
+    "columnGutter": "24px"
+  },
+  "animations": {
+    "ease": "cubic-bezier(.72,.04,.16,.97)",
+    "duration": "3s"
+  },
+  "assets": {
+    "banners": [
+      {
+        "name": "banner-blue-money",
+        "file": "banner-blue-money.jpg",
+        "theme": "blue-financial",
+        "usage": "Investimentos, benefícios, produtos financeiros"
+      },
+      {
+        "name": "banner-yellow-money",
+        "file": "banner-yellow-money.jpg",
+        "theme": "yellow-financial",
+        "usage": "CTAs, promoções, destaques",
+        "featured": true
+      },
+      {
+        "name": "banner-blue-phone",
+        "file": "banner-blue-phone.jpg",
+        "theme": "blue-mobile",
+        "usage": "App mobile, tecnologia"
+      },
+      {
+        "name": "banner-yellow-time",
+        "file": "banner-yellow-time.jpg",
+        "theme": "yellow-time",
+        "usage": "Prazos, urgência, tempo limitado"
+      },
+      {
+        "name": "banner-gray-disabled",
+        "file": "banner-gray-disabled.jpg",
+        "theme": "neutral",
+        "usage": "Estados inativos, manutenção"
+      }
+    ],
+    "iconSprites": [
+      {
+        "name": "actions",
+        "file": "actions.svg",
+        "icons": ["edit", "delete", "add", "remove", "save", "cancel", "search", "filter", "download", "upload", "print", "share", "copy", "paste"],
+        "usage": "Botões, controles, interações"
+      },
+      {
+        "name": "alerts",
+        "file": "alerts.svg",
+        "icons": ["success", "error", "warning", "info", "notification", "bell", "badge"],
+        "usage": "Notificações, mensagens, feedbacks"
+      },
+      {
+        "name": "arrows",
+        "file": "arrows.svg",
+        "icons": ["up", "down", "left", "right", "back", "forward"],
+        "usage": "Direções, navegação"
+      },
+      {
+        "name": "brands",
+        "file": "brands.svg",
+        "usage": "Logos de marcas e parceiros",
+        "featured": true
+      },
+      {
+        "name": "money",
+        "file": "money.svg",
+        "icons": ["coin", "bill", "piggy-bank", "wallet", "chart-up", "chart-down", "transfer", "exchange", "calculator", "receipt"],
+        "usage": "Ícones financeiros",
+        "featured": true
+      },
+      {
+        "name": "navigation",
+        "file": "navigation.svg",
+        "icons": ["home", "dashboard", "menu", "close", "user", "settings", "help", "logout", "chevron-left", "chevron-right", "chevron-up", "chevron-down"],
+        "usage": "Menus, setas, direções"
+      },
+      {
+        "name": "files",
+        "file": "files.svg",
+        "icons": ["pdf", "doc", "xls", "image", "video", "audio", "zip", "generic"],
+        "usage": "Tipos de arquivo"
+      },
+      {
+        "name": "illustrations",
+        "file": "illustrations.svg",
+        "usage": "Ilustrações diversas",
+        "featured": true
+      },
+      {
+        "name": "loaders",
+        "file": "loaders.svg",
+        "usage": "Animações de loading"
+      },
+      {
+        "name": "editor",
+        "file": "editor.svg",
+        "usage": "Ferramentas de edição de texto"
+      },
+      {
+        "name": "emojis",
+        "file": "emojis.svg",
+        "usage": "Emojis e reações"
+      }
+    ]
+  },
+  "accessibility": {
+    "minContrast": {
+      "normalText": "4.5:1",
+      "largeText": "3:1"
+    },
+    "minFontSize": {
+      "mobile": "14px",
+      "desktop": "16px"
+    },
+    "lineHeight": {
+      "min": "1.5"
+    }
+  },
+  "team": {
+    "guild": "Guilda do Design System",
+    "channel": "Aurora Design System",
+    "meetings": "Sextas às 14h"
+  },
+  "links": {
+    "designSystem": "https://auroralabs.example/design-system/",
+    "designFile": "https://auroralabs.example/design-system/design-file",
+    "internalGuide": "https://auroralabs.example/design-system/guild",
+    "components": "https://auroralabs.example/design-system/components"
+  }
+}
+

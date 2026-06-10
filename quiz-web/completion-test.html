@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧪 Teste - Página de Conclusão</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f8fafb 0%, #e1e9ec 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+        }
+
+        .test-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            color: #002740;
+            margin-bottom: 8px;
+            font-size: 24px;
+        }
+
+        .subtitle {
+            color: #546c7e;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        .test-section {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 39, 64, 0.08);
+        }
+
+        .test-section h2 {
+            color: #002740;
+            font-size: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rank-cards {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .rank-card {
+            padding: 15px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            text-align: center;
+        }
+
+        .rank-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .rank-card.selected {
+            border-color: #002740;
+        }
+
+        .rank-card .icon {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        .rank-card .name {
+            font-weight: 700;
+            font-size: 12px;
+            margin-bottom: 3px;
+        }
+
+        .rank-card .xp-range {
+            font-size: 10px;
+            opacity: 0.8;
+        }
+
+        /* Cores dos ranks */
+        .rank-escudeiro { background: linear-gradient(135deg, #c0a445 0%, #ddc35f 100%); color: #4a3d1a; }
+        .rank-cartografo { background: linear-gradient(135deg, #abbdc8 0%, #d4e1e8 100%); color: #253746; }
+        .rank-cavaleiro { background: linear-gradient(135deg, #67d2df 0%, #a8e6ec 100%); color: #002740; }
+        .rank-oraculo { background: linear-gradient(135deg, #a259ff 0%, #c694ff 100%); color: #ffffff; }
+        .rank-grao-mestre { background: linear-gradient(135deg, #002740 0%, #124666 100%); color: #f9e27d; }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 2fr repeat(4, 1fr);
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 0;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #253746;
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 12px;
+            border: 2px solid #e1e9ec;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #67d2df;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        .test-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #002740 0%, #124666 100%);
+            color: #ffffff;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #124666 0%, #336b8c 100%);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #ffffff;
+            color: #002740;
+            border: 2px solid #e1e9ec;
+        }
+
+        .btn-secondary:hover {
+            border-color: #67d2df;
+        }
+
+        .preview-frame {
+            width: 100%;
+            height: 550px;
+            border: 2px solid #e1e9ec;
+            border-radius: 10px;
+        }
+
+        .note {
+            background: rgba(103, 210, 223, 0.1);
+            border-left: 3px solid #67d2df;
+            padding: 12px 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 12px;
+            color: #253746;
+        }
+
+        .badge-preview {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .badge-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 12px;
+            background: #f8fafb;
+            border-radius: 15px;
+            font-size: 11px;
+            color: #002740;
+        }
+
+        .badge-item .icon { font-size: 14px; }
+
+        .info-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 12px;
+        }
+
+        .info-row .note {
+            flex: 1;
+        }
+
+        @media (max-width: 768px) {
+            .rank-cards { grid-template-columns: repeat(3, 1fr); }
+            .form-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste - Página de Conclusão</h1>
+        <p class="subtitle">Configure e visualize diferentes cenários de conclusão</p>
+
+        <!-- Seleção de Rank -->
+        <div class="test-section">
+            <h2>🎖️ Testar Rank</h2>
+            <div class="rank-cards">
+                <div class="rank-card rank-escudeiro" data-rank="escudeiro" data-xp="350" onclick="selectRank(this)">
+                    <div class="icon">🛡️</div>
+                    <div class="name">Escudeiro</div>
+                    <div class="xp-range">0-500 XP</div>
+                </div>
+                <div class="rank-card rank-cartografo" data-rank="cartografo" data-xp="750" onclick="selectRank(this)">
+                    <div class="icon">🗺️</div>
+                    <div class="name">Cartógrafo</div>
+                    <div class="xp-range">501-1000 XP</div>
+                </div>
+                <div class="rank-card rank-cavaleiro" data-rank="cavaleiro" data-xp="1250" onclick="selectRank(this)">
+                    <div class="icon">⚔️</div>
+                    <div class="name">Cavaleiro</div>
+                    <div class="xp-range">1001-1500 XP</div>
+                </div>
+                <div class="rank-card rank-oraculo" data-rank="oraculo" data-xp="1750" onclick="selectRank(this)">
+                    <div class="icon">🔮</div>
+                    <div class="name">Oráculo</div>
+                    <div class="xp-range">1501-2000 XP</div>
+                </div>
+                <div class="rank-card rank-grao-mestre selected" data-rank="grao-mestre" data-xp="2500" onclick="selectRank(this)">
+                    <div class="icon">👑</div>
+                    <div class="name">Grão-Mestre</div>
+                    <div class="xp-range">2001+ XP</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Config + Badges lado a lado -->
+        <div class="test-section">
+            <h2>⚙️ Configuração</h2>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="playerName">Nome</label>
+                    <input type="text" id="playerName" value="Desenvolvedor(a) Aurora Labs">
+                </div>
+                <div class="form-group">
+                    <label for="xpValue">XP</label>
+                    <input type="number" id="xpValue" value="2500" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="chaptersCompleted">Capítulos</label>
+                    <input type="number" id="chaptersCompleted" value="6" min="0" max="6">
+                </div>
+                <div class="form-group">
+                    <label for="questionsCorrect">Acertos</label>
+                    <input type="number" id="questionsCorrect" value="18" min="0">
+                </div>
+                <div class="form-group">
+                    <label for="questionsTotal">Total</label>
+                    <input type="number" id="questionsTotal" value="21" min="1">
+                </div>
+            </div>
+            
+            <div class="info-row">
+                <div class="note">
+                    <strong>🏆 Badges:</strong> 
+                    📚 Fundamentos · 🗺️ Access Patterns · ⚡ Queries · 🔄 Query Reversa · 📋 Single-Table · 🗼 GSIs · 🧰 Arsenal
+                </div>
+                <div class="note">
+                    <strong>📦 Fonte de dados:</strong> localStorage (quest_progress) ou URL params para teste
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="actions">
+            <button class="test-btn btn-primary" onclick="openCompletion()">
+                🚀 Carregar Preview
+            </button>
+            <button class="test-btn btn-secondary" onclick="openInNewTab()">
+                📄 Nova Aba
+            </button>
+            <button class="test-btn btn-secondary" onclick="simulateLocalStorage()">
+                💾 Simular localStorage
+            </button>
+            <button class="test-btn btn-secondary" onclick="clearLocalStorage()">
+                🗑️ Limpar localStorage
+            </button>
+        </div>
+
+        <!-- Preview -->
+        <div class="test-section">
+            <h2>👁️ Preview</h2>
+            <iframe id="previewFrame" class="preview-frame" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <script>
+        function selectRank(element) {
+            document.querySelectorAll('.rank-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('xpValue').value = element.dataset.xp;
+        }
+
+        function getFormData() {
+            return {
+                name: document.getElementById('playerName').value,
+                xp: document.getElementById('xpValue').value,
+                chapters: document.getElementById('chaptersCompleted').value,
+                correct: document.getElementById('questionsCorrect').value,
+                total: document.getElementById('questionsTotal').value
+            };
+        }
+
+        function buildURL() {
+            const data = getFormData();
+            return `completion.html?name=${encodeURIComponent(data.name)}&xp=${data.xp}&chapters=${data.chapters}&correct=${data.correct}&total=${data.total}`;
+        }
+
+        function openCompletion() {
+            document.getElementById('previewFrame').src = buildURL();
+        }
+
+        function openInNewTab() {
+            window.open(buildURL(), '_blank');
+        }
+
+        function simulateLocalStorage() {
+            const data = getFormData();
+            
+            // Simular estrutura do quest_progress
+            const questProgress = {
+                playerName: data.name,
+                language: 'python',
+                totalXP: parseInt(data.xp),
+                labsProgress: {
+                    'chapter_0': {
+                        xpEarned: Math.floor(parseInt(data.xp) / 3),
+                        percentage: 100,
+                        completed: true,
+                        correctAnswers: Math.floor(parseInt(data.correct) / 3),
+                        totalQuestions: Math.floor(parseInt(data.total) / 3)
+                    },
+                    'chapter_1': {
+                        xpEarned: Math.floor(parseInt(data.xp) / 3),
+                        percentage: 100,
+                        completed: true,
+                        correctAnswers: Math.floor(parseInt(data.correct) / 3),
+                        totalQuestions: Math.floor(parseInt(data.total) / 3)
+                    },
+                    'chapter_2': {
+                        xpEarned: parseInt(data.xp) - 2 * Math.floor(parseInt(data.xp) / 3),
+                        percentage: 100,
+                        completed: true,
+                        correctAnswers: parseInt(data.correct) - 2 * Math.floor(parseInt(data.correct) / 3),
+                        totalQuestions: parseInt(data.total) - 2 * Math.floor(parseInt(data.total) / 3)
+                    }
+                },
+                lastUpdated: Date.now()
+            };
+            
+            localStorage.setItem('quest_progress', JSON.stringify(questProgress));
+            alert('✅ localStorage simulado!\n\nAgora abra completion.html sem parâmetros para testar.');
+            
+            // Abrir sem parâmetros para testar localStorage
+            document.getElementById('previewFrame').src = 'completion.html';
+        }
+
+        function clearLocalStorage() {
+            localStorage.removeItem('quest_progress');
+            alert('🗑️ localStorage limpo!');
+        }
+
+        // Carregar preview inicial
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(openCompletion, 300);
+        });
+    </script>
+</body>
+</html>

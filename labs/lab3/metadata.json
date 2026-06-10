@@ -1,0 +1,57 @@
+{
+  "id": "lab3",
+  "icon": "🗼",
+  "title": "CAPÍTULO 3: TORRE DOS GSIs",
+  "subtitle": "A Visão do Alto da Torre - Veja Seus Dados de Qualquer Ângulo",
+  "narrator": "🗼 GUARDIÃO DA TORRE: \"Você dominou queries por PK! Agora aprenda a buscar por QUALQUER atributo! 🔓\"",
+  "highlights": [
+    "🔍 O que é GSI e para que serve",
+    "⚔️ GSI vs LSI: Diferenças e quando usar cada um",
+    "⚡ Eventual Consistency e Hot Partitions"
+  ],
+  "missions": [
+    "Q1: O que é um GSI?",
+    "Q2: Para que servem os GSIs?",
+    "Q3: GSI vs LSI: Diferença Principal",
+    "Q4: Quando usar LSI ao invés de GSI?",
+    "Q5: Atualizações Assíncronas do GSI",
+    "Q6: Eventual Consistency em GSIs",
+    "Q7: Importância da Partition Key",
+    "Q8: Query em GSI HIERARCHY"
+  ],
+  "details": {
+    "time": "~30 minutos",
+    "xp": "1.050 XP",
+    "type": "Múltipla escolha",
+    "badge": "🗼 \"GSI Master\""
+  },
+  "translations": {
+    "en": {
+      "title": "CHAPTER 3: GSI TOWER",
+      "subtitle": "The View from the Tower - See Your Data from Any Angle",
+      "narrator": "🗼 TOWER GUARDIAN: \"You have mastered PK queries. Now learn how to search by ANY attribute! 🔓\"",
+      "highlights": [
+        "🔍 What a GSI is and what it is used for",
+        "⚔️ GSI vs LSI: differences and when to use each one",
+        "⚡ Eventual consistency and hot partitions"
+      ],
+      "missions": [
+        "Q1: What is a GSI?",
+        "Q2: What are GSIs used for?",
+        "Q3: GSI vs LSI: Main Difference",
+        "Q4: When to Use LSI Instead of GSI",
+        "Q5: Asynchronous GSI Updates",
+        "Q6: Eventual Consistency in GSIs",
+        "Q7: Partition Key Importance",
+        "Q8: Querying the HIERARCHY GSI"
+      ],
+      "details": {
+        "time": "~30 minutes",
+        "type": "Multiple choice",
+        "badge": "🗼 \"GSI Master\""
+      }
+    }
+  },
+  "unlockRequirement": "lab2",
+  "lab": "lab3"
+}

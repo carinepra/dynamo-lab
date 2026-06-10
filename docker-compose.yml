@@ -1,0 +1,130 @@
+services:
+  # DynamoDB Local para os labs
+  dynamodb-local:
+    container_name: dynamodb-local
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "17000:8000"
+    command: "-jar DynamoDBLocal.jar -sharedDb"
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - dynamodb-lab
+
+  # Backend API (FastAPI)
+  backend:
+    container_name: dynamodb-backend
+    build:
+      context: ./copilot/backend
+      dockerfile: Dockerfile
+    ports:
+      - "17091:8091"
+    environment:
+      - QUIZ_MODE=closed
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - TABLE_NAME=aurora-benefits
+      - DYNAMODB_EXECUTION_ENABLED=false
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - CORS_ORIGINS=${CORS_ORIGINS:-http://localhost:17080,http://127.0.0.1:17080}
+      # Configurações de performance e timeout
+      - PYTHONUNBUFFERED=1
+      - UVICORN_TIMEOUT_KEEP_ALIVE=65
+    volumes:
+      # Dados persistentes (não montar src/ em produção evita reload issues)
+      - ./copilot/backend/data:/app/data
+      # Schemas dos labs
+      - ./copilot/lab1:/app/lab1
+      - ./copilot/lab2:/app/lab2
+      - ./copilot/lab3:/app/lab3
+      # Scripts dos labs (para rodar via docker exec)
+      - ./labs:/app/labs
+    depends_on:
+      - dynamodb-local
+    networks:
+      - dynamodb-lab
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    # Sem --reload em produção! Isso previne deadlocks
+    # Para dev: use `make backend-start` localmente
+    command: uvicorn src.main:app --host 0.0.0.0 --port 8091 --timeout-keep-alive 65 --workers 1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8091/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Frontend (Nginx)
+  frontend:
+    container_name: dynamodb-frontend
+    build:
+      context: ./quiz-web
+      dockerfile: Dockerfile
+    ports:
+      - "17080:80"
+    volumes:
+      # Metadados dos labs
+      - ./labs:/usr/share/nginx/html/labs:ro
+    networks:
+      - dynamodb-lab
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:80/"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 5s
+
+  # Copilot Gamificado (Quiz Interativo CLI - opcional)
+  copilot:
+    container_name: dynamodb-copilot
+    build:
+      context: ./copilot
+      dockerfile: Dockerfile
+    environment:
+      - DYNAMODB_ENDPOINT=http://dynamodb-local:8000
+      - TABLE_NAME=aurora-benefits
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+    volumes:
+      # Código fonte (para desenvolvimento)
+      - ./copilot/src:/app/src
+      - ./copilot/config:/app/config
+      - ./copilot/scripts:/app/scripts
+      # Dados persistentes (ranking, progresso)
+      - ./copilot/data:/app/data
+      # Secrets (se instrutor)
+      - ./copilot/secrets:/app/secrets
+    depends_on:
+      - dynamodb-local
+    networks:
+      - dynamodb-lab
+    # Rodar em modo interativo
+    stdin_open: true
+    tty: true
+    # Não iniciar automaticamente (usar docker-compose run)
+    profiles:
+      - tools
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  dynamodb-lab:
+    driver: bridge

@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚔️ Cerimônia de Consagração - Quest DynamoDB</title>
+    <link rel="stylesheet" href="componentes-quest.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* ============================================
+           ESTILOS DA PÁGINA DE CONCLUSÃO - LAYOUT HORIZONTAL
+           ============================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rubik', -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            overflow-x: hidden;
+            
+            /* Gradiente de céu noturno */
+            background: linear-gradient(180deg, 
+                #0a1f3d 0%,
+                #002740 30%,
+                #003d5c 60%,
+                #124666 100%
+            );
+        }
+
+        /* Estrelas animadas */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 60% 70%, white, transparent),
+                radial-gradient(1px 1px at 50% 50%, white, transparent),
+                radial-gradient(1px 1px at 80% 10%, white, transparent),
+                radial-gradient(2px 2px at 90% 60%, white, transparent),
+                radial-gradient(1px 1px at 33% 50%, white, transparent);
+            background-size: 200% 200%;
+            animation: twinkle 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Container Principal */
+        .completion-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 60px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ============================================
+           ANIMAÇÃO DAS PORTAS
+           ============================================ */
+        .hall-doors {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+            display: flex;
+            pointer-events: none;
+        }
+
+        .door {
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(135deg, #002740 0%, #001a2e 100%);
+            position: relative;
+        }
+
+        .door::after {
+            content: '⚔️';
+            position: absolute;
+            top: 50%;
+            font-size: 60px;
+            transform: translateY(-50%);
+            opacity: 0.3;
+        }
+
+        .door-left {
+            border-right: 4px solid rgba(103, 210, 223, 0.5);
+            animation: doorOpenLeft 1.2s ease-out 0.3s forwards;
+        }
+
+        .door-left::after { right: 30px; }
+
+        .door-right {
+            border-left: 4px solid rgba(103, 210, 223, 0.5);
+            animation: doorOpenRight 1.2s ease-out 0.3s forwards;
+        }
+
+        .door-right::after { left: 30px; }
+
+        @keyframes doorOpenLeft { to { transform: translateX(-100%); } }
+        @keyframes doorOpenRight { to { transform: translateX(100%); } }
+
+        /* ============================================
+           CONFETTI
+           ============================================ */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+            animation: confettiFall 4s ease-out forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { opacity: 1; transform: translateY(-100px) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(100vh) rotate(720deg); }
+        }
+
+        /* ============================================
+           LOGO AURORA ACADEMY
+           ============================================ */
+        .start-logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeInUp 0.6s ease 1.5s forwards;
+        }
+
+        .start-logo-img {
+            height: 70px;
+            width: auto;
+            filter: drop-shadow(0 4px 12px rgba(0, 39, 64, 0.3));
+        }
+
+        .start-logo-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.9);
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================
+           CARTA DE NOMEAÇÃO - LAYOUT HORIZONTAL
+           ============================================ */
+        .scroll-container {
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.7s forwards;
+            max-width: 1400px;
+            width: 95%;
+        }
+
+        .royal-scroll {
+            background: linear-gradient(180deg, 
+                #faf3e0 0%, 
+                #f5ead3 10%, 
+                #fff8e7 50%, 
+                #f5ead3 90%, 
+                #e8dcc0 100%
+            );
+            border-radius: 20px;
+            padding: 50px 60px;
+            position: relative;
+            box-shadow: 
+                0 25px 80px rgba(0, 0, 0, 0.4),
+                0 0 0 4px rgba(192, 164, 69, 0.5);
+        }
+
+        .royal-scroll::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(135deg, 
+                rgba(249, 226, 125, 0.6) 0%,
+                rgba(103, 210, 223, 0.6) 50%,
+                rgba(162, 89, 255, 0.6) 100%
+            );
+            border-radius: 19px;
+            z-index: -1;
+            opacity: 0.9;
+            filter: blur(2px);
+        }
+
+        /* Decorações */
+        .scroll-decoration {
+            position: absolute;
+            font-size: 26px;
+            opacity: 0.2;
+        }
+
+        .scroll-decoration.top-left { top: 18px; left: 18px; }
+        .scroll-decoration.top-right { top: 18px; right: 18px; }
+        .scroll-decoration.bottom-left { bottom: 18px; left: 18px; }
+        .scroll-decoration.bottom-right { bottom: 18px; right: 18px; }
+
+        /* ============================================
+           LAYOUT PRINCIPAL - GRID HORIZONTAL
+           ============================================ */
+        .decree-content {
+            display: grid;
+            grid-template-columns: 1fr 1.8fr 1fr;
+            gap: 50px;
+            align-items: stretch;
+        }
+
+        /* COLUNA ESQUERDA - Player Info */
+        .left-column {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .decree-emblem {
+            font-size: 70px;
+            margin-bottom: 15px;
+            animation: gentlePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .rank-badge-large {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 32px;
+            border-radius: 35px;
+            font-size: 22px;
+            font-weight: 700;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+            margin-bottom: 20px;
+        }
+
+        .rank-icon { font-size: 34px; }
+
+        /* Variações de Rank */
+        .rank-escudeiro {
+            background: linear-gradient(135deg, #c0a445 0%, #ddc35f 100%);
+            color: #4a3d1a;
+            border: 2px solid #886B1D;
+        }
+
+        .rank-cartografo {
+            background: linear-gradient(135deg, #abbdc8 0%, #d4e1e8 100%);
+            color: #253746;
+            border: 2px solid #546c7e;
+        }
+
+        .rank-cavaleiro {
+            background: linear-gradient(135deg, #67d2df 0%, #a8e6ec 100%);
+            color: #002740;
+            border: 2px solid #39a0ae;
+        }
+
+        .rank-oraculo {
+            background: linear-gradient(135deg, #a259ff 0%, #c694ff 100%);
+            color: #ffffff;
+            border: 2px solid #823cd6;
+        }
+
+        .rank-grao-mestre {
+            background: linear-gradient(135deg, #002740 0%, #124666 100%);
+            color: #f9e27d;
+            border: 2px solid #67d2df;
+        }
+
+        .player-name-display {
+            font-size: 32px;
+            font-weight: 700;
+            color: #002740;
+            margin-bottom: 20px;
+            word-break: break-word;
+        }
+
+        .xp-display {
+            margin-bottom: 25px;
+        }
+
+        .xp-value {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #a259ff 0%, #67d2df 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .xp-label {
+            font-size: 13px;
+            color: #886B1D;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px 8px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+        }
+
+        .stat-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: #002740;
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: #546c7e;
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+
+        /* COLUNA CENTRAL - Mensagem e Conquistas */
+        .center-column {
+            border-left: 3px solid rgba(192, 164, 69, 0.25);
+            border-right: 3px solid rgba(192, 164, 69, 0.25);
+            padding: 10px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .decree-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(192, 164, 69, 0.25);
+        }
+
+        .decree-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #886B1D;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+        }
+
+        .decree-subtitle {
+            font-size: 14px;
+            color: #a08840;
+            font-style: italic;
+            margin-top: 5px;
+        }
+
+        .wizard-message {
+            padding: 28px;
+            background: linear-gradient(135deg, rgba(103, 210, 223, 0.12) 0%, rgba(162, 89, 255, 0.12) 100%);
+            border-radius: 16px;
+            border-left: 5px solid #a259ff;
+            transition: all 0.3s ease;
+        }
+
+        /* Variações de cor do wizard-message por rank */
+        .wizard-message.message-escudeiro {
+            background: linear-gradient(135deg, rgba(192, 164, 69, 0.12) 0%, rgba(221, 195, 95, 0.12) 100%);
+            border-left-color: #c0a445;
+        }
+        
+        .wizard-message.message-cartografo {
+            background: linear-gradient(135deg, rgba(171, 189, 200, 0.15) 0%, rgba(212, 225, 232, 0.15) 100%);
+            border-left-color: #546c7e;
+        }
+        
+        .wizard-message.message-cavaleiro {
+            background: linear-gradient(135deg, rgba(103, 210, 223, 0.12) 0%, rgba(168, 230, 236, 0.12) 100%);
+            border-left-color: #39a0ae;
+        }
+        
+        .wizard-message.message-oraculo {
+            background: linear-gradient(135deg, rgba(162, 89, 255, 0.12) 0%, rgba(198, 148, 255, 0.12) 100%);
+            border-left-color: #a259ff;
+        }
+        
+        .wizard-message.message-grao-mestre {
+            background: linear-gradient(135deg, rgba(0, 39, 64, 0.1) 0%, rgba(103, 210, 223, 0.15) 100%);
+            border-left-color: #002740;
+        }
+
+        .wizard-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .wizard-avatar { font-size: 45px; }
+
+        .wizard-name {
+            font-size: 20px;
+            font-weight: 700;
+            color: #002740;
+        }
+
+        .wizard-title {
+            font-size: 14px;
+            color: #546c7e;
+        }
+
+        .wizard-text {
+            font-size: 18px;
+            line-height: 1.8;
+            color: #253746;
+            font-style: italic;
+        }
+
+        /* COLUNA DIREITA - Conquistas e Assinatura */
+        .right-column {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .achievements-section {
+            padding: 25px;
+            background: rgba(192, 164, 69, 0.1);
+            border-radius: 16px;
+            border: 2px solid rgba(192, 164, 69, 0.25);
+            margin-bottom: 25px;
+        }
+
+        .achievements-title {
+            font-size: 14px;
+            color: #886B1D;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+
+        .achievements-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .achievement-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: #ffffff;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #002740;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            opacity: 0;
+            animation: achievementPop 0.3s ease-out forwards;
+        }
+
+        .achievement-badge:nth-child(1) { animation-delay: 2.2s; }
+        .achievement-badge:nth-child(2) { animation-delay: 2.35s; }
+        .achievement-badge:nth-child(3) { animation-delay: 2.5s; }
+        .achievement-badge:nth-child(4) { animation-delay: 2.65s; }
+        .achievement-badge:nth-child(5) { animation-delay: 2.8s; }
+        .achievement-badge:nth-child(6) { animation-delay: 2.95s; }
+        .achievement-badge:nth-child(7) { animation-delay: 3.1s; }
+
+        @keyframes achievementPop {
+            from { opacity: 0; transform: scale(0); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .achievement-icon { font-size: 20px; }
+
+        .decree-signature {
+            padding-top: 20px;
+            border-top: 2px solid rgba(192, 164, 69, 0.25);
+        }
+
+        .seal {
+            font-size: 55px;
+            margin-bottom: 12px;
+        }
+
+        .signature-text {
+            font-size: 15px;
+            color: #886B1D;
+            font-style: italic;
+        }
+
+        .signature-date {
+            font-size: 13px;
+            color: #a08840;
+            margin-top: 8px;
+        }
+
+        /* ============================================
+           AÇÕES
+           ============================================ */
+        .completion-actions {
+            display: flex;
+            gap: 20px;
+            margin-top: 35px;
+            justify-content: center;
+            opacity: 0;
+            animation: fadeInUp 0.5s ease-out 3s forwards;
+        }
+
+        .action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 18px 32px;
+            border-radius: 14px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Rubik', sans-serif;
+        }
+
+        .btn-primary-action {
+            background: linear-gradient(135deg, #002740 0%, #124666 100%);
+            color: #ffffff;
+            border: 2px solid #67d2df;
+            box-shadow: 0 4px 15px rgba(0, 39, 64, 0.3);
+        }
+
+        .btn-primary-action:hover {
+            background: linear-gradient(135deg, #124666 0%, #336b8c 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(103, 210, 223, 0.4);
+        }
+
+        .btn-secondary-action {
+            background: #ffffff;
+            color: #002740;
+            border: 2px solid #e1e9ec;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-secondary-action:hover {
+            border-color: #67d2df;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(103, 210, 223, 0.25);
+        }
+
+        .btn-icon { font-size: 20px; }
+
+        /* ============================================
+           ÁREA DO CERTIFICADO (para captura)
+           ============================================ */
+        #certificateArea {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 30px;
+            border-radius: 20px;
+        }
+        
+        /* Estado de captura - aplica background para o PNG */
+        #certificateArea.capturing {
+            background: linear-gradient(180deg, 
+                #0a1f3d 0%,
+                #002740 30%,
+                #003d5c 60%,
+                #124666 100%
+            );
+            padding: 40px 50px;
+        }
+        
+        /* Loading durante download */
+        .btn-loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        
+        .btn-loading::after {
+            content: '...';
+            animation: dots 1s steps(3, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        /* ============================================
+           RESPONSIVO
+           ============================================ */
+        
+        /* Telas muito grandes */
+        @media (min-width: 1600px) {
+            .scroll-container {
+                max-width: 1600px;
+            }
+            
+            .royal-scroll {
+                padding: 60px 80px;
+            }
+            
+            .decree-content {
+                gap: 70px;
+            }
+        }
+
+        /* Tablets e telas menores */
+        @media (max-width: 1100px) {
+            .decree-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .center-column {
+                border-left: none;
+                border-right: none;
+                border-top: 2px solid rgba(192, 164, 69, 0.3);
+                border-bottom: 2px solid rgba(192, 164, 69, 0.3);
+                padding: 30px 0;
+            }
+
+            .royal-scroll {
+                padding: 35px;
+            }
+
+            .start-logo-img {
+                height: 55px;
+            }
+            
+            .completion-container {
+                padding: 30px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .completion-actions {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .start-logo-img {
+                height: 45px;
+            }
+            
+            .royal-scroll {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Portas do Salão -->
+    <div class="hall-doors">
+        <div class="door door-left"></div>
+        <div class="door door-right"></div>
+    </div>
+
+    <!-- Confetti Container -->
+    <div class="confetti-container" id="confetti"></div>
+
+    <!-- Container Principal -->
+    <div class="completion-container">
+        
+        <!-- Container para captura do certificado -->
+        <div id="certificateArea">
+            <!-- Logo Aurora Academy -->
+            <div class="start-logo-container" id="certificateLogo">
+                <svg class="start-logo-img" width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Aurora Labs">
+                    <defs>
+                        <linearGradient id="aurora-mark-completion" x1="8" y1="8" x2="40" y2="40" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#67d2df"/>
+                            <stop offset="0.55" stop-color="#f9e27d"/>
+                            <stop offset="1" stop-color="#789d4a"/>
+                        </linearGradient>
+                        <linearGradient id="aurora-glow-completion" x1="10" y1="34" x2="38" y2="12" gradientUnits="userSpaceOnUse">
+                            <stop offset="0" stop-color="#67d2df" stop-opacity="0.15"/>
+                            <stop offset="1" stop-color="#67d2df" stop-opacity="0.75"/>
+                        </linearGradient>
+                    </defs>
+                    <rect x="2" y="4" width="40" height="40" rx="14" fill="#002740"/>
+                    <path d="M10 32C15 20 20 12 25 10C23 18 29 24 38 32" stroke="url(#aurora-mark-completion)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M13 34C20 28 27 26 36 29" stroke="url(#aurora-glow-completion)" stroke-width="4" stroke-linecap="round"/>
+                    <circle cx="31" cy="14" r="2.5" fill="#f9e27d"/>
+                    <text x="52" y="29" font-family="Rubik, Arial, sans-serif" font-size="24" font-weight="700" letter-spacing="1.5" fill="#ffffff">AURORA</text>
+                    <text x="54" y="41" font-family="Rubik, Arial, sans-serif" font-size="8" font-weight="700" letter-spacing="4" fill="#f9e27d">LABS</text>
+                </svg>
+                <div class="start-logo-subtitle">Academy</div>
+            </div>
+            
+            <!-- Carta de Nomeação - Layout Horizontal -->
+            <div class="scroll-container">
+            <div class="royal-scroll">
+                <!-- Decorações -->
+                <span class="scroll-decoration top-left">⚜️</span>
+                <span class="scroll-decoration top-right">⚜️</span>
+                <span class="scroll-decoration bottom-left">⚜️</span>
+                <span class="scroll-decoration bottom-right">⚜️</span>
+
+                <!-- Grid de 3 Colunas -->
+                <div class="decree-content">
+                    
+                    <!-- COLUNA ESQUERDA - Player Info -->
+                    <div class="left-column">
+                        <div class="decree-emblem" id="rankEmblem">👑</div>
+                        
+                        <div class="rank-badge-large" id="rankBadge">
+                            <span class="rank-icon" id="rankIcon">👑</span>
+                            <span id="rankName">Grão-Mestre</span>
+                        </div>
+                        
+                        <div class="player-name-display" id="playerName">
+                            Aventureiro(a)
+                        </div>
+
+                        <div class="xp-display">
+                            <div class="xp-value" id="xpValue">0 XP</div>
+                            <div class="xp-label" id="xpLabel">Pontos de Experiência</div>
+                        </div>
+
+                        <div class="stats-grid">
+                            <div class="stat-item">
+                                <div class="stat-value" id="chaptersCompleted">0</div>
+                                <div class="stat-label" id="statChaptersLabel">Capítulos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="questionsCorrect">0</div>
+                                <div class="stat-label" id="statCorrectLabel">Acertos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value" id="accuracy">0%</div>
+                                <div class="stat-label" id="statAccuracyLabel">Precisão</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA CENTRAL - Mensagem -->
+                    <div class="center-column">
+                        <div class="decree-header">
+                            <div class="decree-title" id="decreeTitle">Reino da Aurora Labs</div>
+                            <div class="decree-subtitle" id="decreeSubtitle">Carta de Nomeação Oficial</div>
+                        </div>
+
+                        <div class="wizard-message" id="wizardMessageContainer">
+                            <div class="wizard-header">
+                                <span class="wizard-avatar" id="mentorAvatar">🧙</span>
+                                <div>
+                                    <div class="wizard-name" id="mentorName">Arquiteto-Mor</div>
+                                    <div class="wizard-title" id="mentorTitle">Guardião do Reino</div>
+                                </div>
+                            </div>
+                            <p class="wizard-text" id="wizardMessage">
+                                "Você expandiu seu arsenal de ferramentas e agora domina as artes do DynamoDB! 
+                                Cada arquiteto precisa conhecer as ferramentas certas para cada desafio. 
+                                O Reino da Aurora Labs tem orgulho de tê-lo(a) entre seus desenvolvedores mais versáteis!"
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- COLUNA DIREITA - Conquistas e Assinatura -->
+                    <div class="right-column">
+                        <div class="achievements-section">
+                            <div class="achievements-title" id="achievementsTitle">🏆 Habilidades Dominadas</div>
+                            <div class="achievements-grid" id="achievementsGrid">
+                                <!-- Preenchido via JS -->
+                            </div>
+                        </div>
+
+                        <div class="decree-signature">
+                            <div class="seal">🔱</div>
+                            <div class="signature-text" id="councilSignature">Conselho dos Arquitetos</div>
+                            <div class="signature-date" id="completionDate">Dezembro de 2025</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div><!-- Fim certificateArea -->
+
+            <!-- Ações -->
+            <div class="completion-actions">
+                <button class="action-btn btn-primary-action" id="goToChaptersBtn">
+                    <span class="btn-icon">📜</span>
+                    <span id="backToChaptersLabel">Voltar aos Capítulos</span>
+                </button>
+                <button class="action-btn btn-secondary-action" id="downloadCertificateBtn">
+                    <span class="btn-icon">📥</span>
+                    <span id="downloadCertificateLabel">Baixar Certificado</span>
+                </button>
+                <button class="action-btn btn-secondary-action" id="replayAnimationBtn">
+                    <span class="btn-icon">🎆</span>
+                    <span id="celebrateLabel">Celebrar</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // ============================================
+        // IMPORTS
+        // ============================================
+        import { API_URL } from './js/config.js';
+        import { downloadCertificateAsPNG } from './js/certificate-generator.js';
+        
+        // ============================================
+        // INTERNACIONALIZAÇÃO
+        // ============================================
+        const COMPLETION_TEXT = {
+            'pt-BR': {
+                pageTitle: '⚔️ Cerimônia de Consagração - Quest DynamoDB',
+                xpLabel: 'Pontos de Experiência',
+                statChapters: 'Capítulos',
+                statCorrect: 'Acertos',
+                statAccuracy: 'Precisão',
+                decreeTitle: 'Reino da Aurora Labs',
+                decreeSubtitle: 'Carta de Nomeação Oficial',
+                achievementsTitle: '🏆 Habilidades Dominadas',
+                councilSignature: 'Conselho dos Arquitetos',
+                backToChapters: 'Voltar aos Capítulos',
+                downloadCertificate: 'Baixar Certificado',
+                celebrate: 'Celebrar',
+                generating: 'Gerando',
+                downloaded: 'Baixado!',
+                downloadError: '❌ Erro ao gerar certificado.\n\nTente novamente.',
+                defaultAdventurer: 'Aventureiro(a)',
+                certificateFilenamePrefix: 'Certificado_Aurora_Academy',
+                svgXpLabel: 'PONTOS DE EXPERIÊNCIA',
+                svgChapters: 'CAPÍTULOS',
+                svgCorrect: 'ACERTOS',
+                svgAccuracy: 'PRECISÃO',
+                svgDecreeTitle: 'REINO DA AURORA LABS',
+                svgDecreeSubtitle: 'Carta de Nomeação Oficial',
+                svgAchievementsTitle: '🏆 HABILIDADES DOMINADAS',
+                svgCouncil: 'Conselho dos Arquitetos'
+            },
+            en: {
+                pageTitle: '⚔️ Consecration Ceremony - DynamoDB Quest',
+                xpLabel: 'Experience Points',
+                statChapters: 'Chapters',
+                statCorrect: 'Correct',
+                statAccuracy: 'Accuracy',
+                decreeTitle: 'Aurora Labs Kingdom',
+                decreeSubtitle: 'Official Appointment Letter',
+                achievementsTitle: '🏆 Mastered Skills',
+                councilSignature: 'Council of Architects',
+                backToChapters: 'Back to Chapters',
+                downloadCertificate: 'Download Certificate',
+                celebrate: 'Celebrate',
+                generating: 'Generating',
+                downloaded: 'Downloaded!',
+                downloadError: '❌ Error generating certificate.\n\nPlease try again.',
+                defaultAdventurer: 'Adventurer',
+                certificateFilenamePrefix: 'Aurora_Academy_Certificate',
+                svgXpLabel: 'EXPERIENCE POINTS',
+                svgChapters: 'CHAPTERS',
+                svgCorrect: 'CORRECT',
+                svgAccuracy: 'ACCURACY',
+                svgDecreeTitle: 'AURORA LABS KINGDOM',
+                svgDecreeSubtitle: 'Official Appointment Letter',
+                svgAchievementsTitle: '🏆 MASTERED SKILLS',
+                svgCouncil: 'Council of Architects'
+            }
+        };
+
+        const RANKS_BY_LANG = {
+            'pt-BR': {
+                escudeiro: {
+                    name: 'Escudeiro',
+                    icon: '🛡️',
+                    emblem: '🛡️',
+                    class: 'rank-escudeiro',
+                    messageClass: 'message-escudeiro',
+                    mentorName: 'Mestre de Armas',
+                    mentorTitle: 'Instrutor dos Novatos',
+                    mentorAvatar: '🧔',
+                    message: `"Você deu seus primeiros passos no mundo do DynamoDB! As operações GetItem e Query já fazem parte do seu repertório. Continue praticando - cada ferramenta tem seu momento de brilhar!"`
+                },
+                cartografo: {
+                    name: 'Cartógrafo',
+                    icon: '🗺️',
+                    emblem: '🗺️',
+                    class: 'rank-cartografo',
+                    messageClass: 'message-cartografo',
+                    mentorName: 'Navegador Real',
+                    mentorTitle: 'Guardião dos Mapas',
+                    mentorAvatar: '🧭',
+                    message: `"Você já mapeia Access Patterns com sabedoria! Entender quando usar cada tecnologia é a marca de um bom arquiteto. Continue explorando - os tesouros do Single-Table Design aguardam!"`
+                },
+                cavaleiro: {
+                    name: 'Cavaleiro',
+                    icon: '⚔️',
+                    emblem: '⚔️',
+                    class: 'rank-cavaleiro',
+                    messageClass: 'message-cavaleiro',
+                    mentorName: 'Capitão da Guarda',
+                    mentorTitle: 'Protetor do Reino',
+                    mentorAvatar: '🦸',
+                    message: `"Você domina Query, begins_with e os patterns de acesso! Um verdadeiro guardião que sabe escolher a ferramenta certa para cada batalha. O próximo passo são os GSIs!"`
+                },
+                oraculo: {
+                    name: 'Oráculo',
+                    icon: '🔮',
+                    emblem: '🔮',
+                    class: 'rank-oraculo',
+                    messageClass: 'message-oraculo',
+                    mentorName: 'Vidente Supremo',
+                    mentorTitle: 'Conselheiro dos Sábios',
+                    mentorAvatar: '🔮',
+                    message: `"Você vê além das queries simples - entende GSIs, padrões de acesso e trade-offs! Um arquiteto sábio que conhece múltiplas ferramentas. O Reino reconhece sua versatilidade!"`
+                },
+                'grao-mestre': {
+                    name: 'Grão-Mestre',
+                    icon: '👑',
+                    emblem: '👑',
+                    class: 'rank-grao-mestre',
+                    messageClass: 'message-grao-mestre',
+                    mentorName: 'Arquiteto-Mor',
+                    mentorTitle: 'Guardião do Reino',
+                    mentorAvatar: '🧙',
+                    message: `"Você expandiu seu arsenal de ferramentas e agora domina as artes do DynamoDB! Cada arquiteto precisa conhecer as ferramentas certas para cada desafio. O Reino da Aurora Labs tem orgulho de tê-lo(a) entre seus desenvolvedores mais versáteis!"`
+                }
+            },
+            en: {
+                escudeiro: {
+                    name: 'Squire',
+                    icon: '🛡️',
+                    emblem: '🛡️',
+                    class: 'rank-escudeiro',
+                    messageClass: 'message-escudeiro',
+                    mentorName: 'Master of Arms',
+                    mentorTitle: 'Trainer of Novices',
+                    mentorAvatar: '🧔',
+                    message: `"You took your first steps into the world of DynamoDB! GetItem and Query operations are already part of your toolkit. Keep practicing - every tool has its moment to shine!"`
+                },
+                cartografo: {
+                    name: 'Cartographer',
+                    icon: '🗺️',
+                    emblem: '🗺️',
+                    class: 'rank-cartografo',
+                    messageClass: 'message-cartografo',
+                    mentorName: 'Royal Navigator',
+                    mentorTitle: 'Guardian of the Maps',
+                    mentorAvatar: '🧭',
+                    message: `"You already map Access Patterns with wisdom! Knowing when to use each technology is the mark of a good architect. Keep exploring - the treasures of Single-Table Design await!"`
+                },
+                cavaleiro: {
+                    name: 'Knight',
+                    icon: '⚔️',
+                    emblem: '⚔️',
+                    class: 'rank-cavaleiro',
+                    messageClass: 'message-cavaleiro',
+                    mentorName: 'Captain of the Guard',
+                    mentorTitle: 'Protector of the Realm',
+                    mentorAvatar: '🦸',
+                    message: `"You master Query, begins_with, and access patterns! A true guardian who knows how to choose the right tool for each battle. Next up: GSIs!"`
+                },
+                oraculo: {
+                    name: 'Oracle',
+                    icon: '🔮',
+                    emblem: '🔮',
+                    class: 'rank-oraculo',
+                    messageClass: 'message-oraculo',
+                    mentorName: 'Supreme Seer',
+                    mentorTitle: 'Advisor to the Wise',
+                    mentorAvatar: '🔮',
+                    message: `"You see beyond simple queries - you understand GSIs, access patterns, and trade-offs! A wise architect who knows multiple tools. The Kingdom recognizes your versatility!"`
+                },
+                'grao-mestre': {
+                    name: 'Grand Master',
+                    icon: '👑',
+                    emblem: '👑',
+                    class: 'rank-grao-mestre',
+                    messageClass: 'message-grao-mestre',
+                    mentorName: 'Chief Architect',
+                    mentorTitle: 'Guardian of the Realm',
+                    mentorAvatar: '🧙',
+                    message: `"You expanded your toolkit and now master the arts of DynamoDB! Every architect must know the right tools for each challenge. The Aurora Labs Kingdom is proud to count you among its most versatile developers!"`
+                }
+            }
+        };
+
+        const ACHIEVEMENTS_BY_LANG = {
+            'pt-BR': {
+                fundamentals: { icon: '📚', name: 'Fundamentos' },
+                accessPatterns: { icon: '🗺️', name: 'Access Patterns' },
+                queryMaster: { icon: '⚡', name: 'Queries' },
+                reverseQuery: { icon: '🔄', name: 'Query Reversa' },
+                singleTable: { icon: '📋', name: 'Single-Table' },
+                gsiExpert: { icon: '🗼', name: 'GSIs' },
+                toolbox: { icon: '🧰', name: 'Arsenal' }
+            },
+            en: {
+                fundamentals: { icon: '📚', name: 'Foundations' },
+                accessPatterns: { icon: '🗺️', name: 'Access Patterns' },
+                queryMaster: { icon: '⚡', name: 'Queries' },
+                reverseQuery: { icon: '🔄', name: 'Reverse Query' },
+                singleTable: { icon: '📋', name: 'Single-Table' },
+                gsiExpert: { icon: '🗼', name: 'GSIs' },
+                toolbox: { icon: '🧰', name: 'Toolkit' }
+            }
+        };
+
+        let contentLanguage = 'en';
+
+        function t(key) {
+            const dictionary = COMPLETION_TEXT[contentLanguage] || COMPLETION_TEXT.en;
+            return dictionary[key] || COMPLETION_TEXT.en[key] || key;
+        }
+
+        function getRanks() {
+            return RANKS_BY_LANG[contentLanguage] || RANKS_BY_LANG.en;
+        }
+
+        function getAchievementsMap() {
+            return ACHIEVEMENTS_BY_LANG[contentLanguage] || ACHIEVEMENTS_BY_LANG.en;
+        }
+
+        function formatCompletionDate(date) {
+            const locale = contentLanguage === 'pt-BR' ? 'pt-BR' : 'en-US';
+            return date.toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric' });
+        }
+
+        function applyStaticLabels() {
+            document.documentElement.lang = contentLanguage === 'pt-BR' ? 'pt-BR' : 'en';
+            document.title = t('pageTitle');
+            document.getElementById('xpLabel').textContent = t('xpLabel');
+            document.getElementById('statChaptersLabel').textContent = t('statChapters');
+            document.getElementById('statCorrectLabel').textContent = t('statCorrect');
+            document.getElementById('statAccuracyLabel').textContent = t('statAccuracy');
+            document.getElementById('decreeTitle').textContent = t('decreeTitle');
+            document.getElementById('decreeSubtitle').textContent = t('decreeSubtitle');
+            document.getElementById('achievementsTitle').textContent = t('achievementsTitle');
+            document.getElementById('councilSignature').textContent = t('councilSignature');
+            document.getElementById('backToChaptersLabel').textContent = t('backToChapters');
+            document.getElementById('downloadCertificateLabel').textContent = t('downloadCertificate');
+            document.getElementById('celebrateLabel').textContent = t('celebrate');
+        }
+
+        function getCertificateLabels() {
+            return {
+                xpLabel: t('svgXpLabel'),
+                chapters: t('svgChapters'),
+                correct: t('svgCorrect'),
+                accuracy: t('svgAccuracy'),
+                decreeTitle: t('svgDecreeTitle'),
+                decreeSubtitle: t('svgDecreeSubtitle'),
+                achievementsTitle: t('svgAchievementsTitle'),
+                council: t('svgCouncil'),
+                defaultAdventurer: t('defaultAdventurer')
+            };
+        }
+
+        // ============================================
+        // CONFIGURAÇÃO DOS RANKS
+        // ============================================
+        function getRankFromXP(xp) {
+            if (xp >= 2001) return 'grao-mestre';
+            if (xp >= 1501) return 'oraculo';
+            if (xp >= 1001) return 'cavaleiro';
+            if (xp >= 501) return 'cartografo';
+            return 'escudeiro';
+        }
+
+        function getAchievementsForXP(xp) {
+            const achievements = [];
+            if (xp >= 100) achievements.push('fundamentals');
+            if (xp >= 400) achievements.push('accessPatterns');
+            if (xp >= 700) achievements.push('queryMaster');
+            if (xp >= 1000) achievements.push('reverseQuery');
+            if (xp >= 1400) achievements.push('singleTable');
+            if (xp >= 1800) achievements.push('gsiExpert');
+            if (xp >= 2200) achievements.push('toolbox');
+            return achievements;
+        }
+
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#f9e27d', '#67d2df', '#a259ff', '#789d4a', '#002740', '#4fb9c6'];
+            const shapes = ['■', '●', '▲', '★', '♦'];
+            
+            for (let i = 0; i < 80; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDelay = (Math.random() * 2 + 1.5) + 's';
+                confetti.style.animationDuration = (Math.random() * 2 + 3) + 's';
+                
+                if (Math.random() > 0.5) {
+                    confetti.textContent = shapes[Math.floor(Math.random() * shapes.length)];
+                    confetti.style.color = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.fontSize = (Math.random() * 12 + 8) + 'px';
+                } else {
+                    confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                }
+                
+                container.appendChild(confetti);
+            }
+        }
+
+        function animateXP(targetXP) {
+            const xpElement = document.getElementById('xpValue');
+            let current = 0;
+            const duration = 1500;
+            const startTime = Date.now();
+            
+            function update() {
+                const elapsed = Date.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const easeOut = 1 - Math.pow(1 - progress, 3);
+                current = Math.floor(targetXP * easeOut);
+                xpElement.textContent = current.toLocaleString() + ' XP';
+                if (progress < 1) requestAnimationFrame(update);
+            }
+            
+            setTimeout(update, 2000);
+        }
+
+        function renderAchievements(achievementKeys) {
+            const grid = document.getElementById('achievementsGrid');
+            const achievementsMap = getAchievementsMap();
+            grid.innerHTML = '';
+            
+            achievementKeys.forEach(key => {
+                const a = achievementsMap[key];
+                if (a) {
+                    const badge = document.createElement('div');
+                    badge.className = 'achievement-badge';
+                    const icon = document.createElement('span');
+                    icon.className = 'achievement-icon';
+                    icon.textContent = a.icon;
+                    const name = document.createElement('span');
+                    name.textContent = a.name;
+                    badge.append(icon, name);
+                    grid.appendChild(badge);
+                }
+            });
+        }
+
+        /**
+         * Busca dados do localStorage (quest_progress)
+         * Estrutura: { playerName, language, labsProgress, totalXP, lastUpdated }
+         */
+        function getProgressFromLocalStorage() {
+            try {
+                const saved = localStorage.getItem('quest_progress');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    
+                    // Calcular estatísticas agregadas de todos os labs
+                    let totalCorrect = 0;
+                    let totalQuestions = 0;
+                    let chaptersCompleted = 0;
+                    
+                    let totalXP = 0;
+                    if (data.labsProgress) {
+                        Object.values(data.labsProgress).forEach(lab => {
+                            if (lab.completed) chaptersCompleted++;
+                            if (lab.correctAnswers) totalCorrect += lab.correctAnswers;
+                            if (lab.totalQuestions) totalQuestions += lab.totalQuestions;
+                            if (lab.xpEarned) totalXP += lab.xpEarned;
+                        });
+                    }
+                    
+                    contentLanguage = data.contentLanguage || 'en';
+                    
+                    return {
+                        playerName: data.playerName || t('defaultAdventurer'),
+                        totalXP,
+                        chaptersCompleted,
+                        questionsCorrect: totalCorrect,
+                        questionsTotal: totalQuestions,
+                        language: data.language
+                    };
+                }
+            } catch (e) {
+                console.error('Erro ao ler localStorage:', e);
+            }
+            return null;
+        }
+
+        /**
+         * Busca resultado de uma sessão específica do backend
+         */
+        async function fetchResultFromBackend(sessionId) {
+            try {
+                const response = await fetch(`${API_URL}/results/${sessionId}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return {
+                        playerName: data.player_name,
+                        totalXP: data.total_xp,
+                        chaptersCompleted: 1, // Backend retorna por sessão
+                        questionsCorrect: data.questions_correct,
+                        questionsTotal: data.questions_total,
+                        rank: data.rank
+                    };
+                }
+            } catch (e) {
+                console.error('Erro ao buscar do backend:', e);
+            }
+            return null;
+        }
+
+        /**
+         * Carrega dados de conclusão
+         * Prioridade: 
+         * 1. localStorage (quest_progress) - dados agregados de todos os labs
+         * 2. URL params (para testes)
+         * 3. Backend (se tiver session_id)
+         */
+        async function loadCompletionData() {
+            try {
+                const savedLang = localStorage.getItem('quest_progress');
+                if (savedLang) {
+                    const parsed = JSON.parse(savedLang);
+                    contentLanguage = parsed.contentLanguage || 'en';
+                }
+            } catch (e) {
+                console.error('Erro ao ler idioma:', e);
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionId = urlParams.get('session_id');
+            
+            let completionData = null;
+            
+            // 1. Tentar buscar do localStorage (fonte principal)
+            completionData = getProgressFromLocalStorage();
+            
+            // 2. Se tiver session_id na URL, buscar do backend
+            if (sessionId && !completionData) {
+                completionData = await fetchResultFromBackend(sessionId);
+            }
+            
+            // 3. Fallback para URL params (modo teste)
+            if (!completionData) {
+                completionData = {
+                    playerName: urlParams.get('name') || t('defaultAdventurer'),
+                    totalXP: parseInt(urlParams.get('xp') || '0'),
+                    chaptersCompleted: parseInt(urlParams.get('chapters') || '0'),
+                    questionsCorrect: parseInt(urlParams.get('correct') || '0'),
+                    questionsTotal: parseInt(urlParams.get('total') || '0')
+                };
+            }
+
+            applyStaticLabels();
+            
+            const RANKS = getRanks();
+            
+            // Extrair dados
+            const { playerName, totalXP, chaptersCompleted, questionsCorrect, questionsTotal } = completionData;
+            
+            const rankKey = getRankFromXP(totalXP);
+            const rank = RANKS[rankKey];
+            const achievements = getAchievementsForXP(totalXP);
+            const accuracy = questionsTotal > 0 ? Math.round((questionsCorrect / questionsTotal) * 100) : 0;
+            
+            // Atualizar UI
+            document.getElementById('playerName').textContent = playerName;
+            document.getElementById('rankEmblem').textContent = rank.emblem;
+            document.getElementById('rankIcon').textContent = rank.icon;
+            document.getElementById('rankName').textContent = rank.name;
+            document.getElementById('wizardMessage').textContent = rank.message;
+            document.getElementById('chaptersCompleted').textContent = chaptersCompleted;
+            document.getElementById('questionsCorrect').textContent = questionsCorrect;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            
+            document.getElementById('rankBadge').className = 'rank-badge-large ' + rank.class;
+            
+            // Atualizar mentor dinamicamente baseado no rank
+            document.getElementById('mentorAvatar').textContent = rank.mentorAvatar;
+            document.getElementById('mentorName').textContent = rank.mentorName;
+            document.getElementById('mentorTitle').textContent = rank.mentorTitle;
+            
+            // Aplicar cor do wizard-message baseado no rank
+            const wizardMessageEl = document.getElementById('wizardMessageContainer');
+            wizardMessageEl.className = 'wizard-message ' + rank.messageClass;
+            
+            const now = new Date();
+            const dateStr = formatCompletionDate(now);
+            document.getElementById('completionDate').textContent = dateStr;
+            
+            renderAchievements(achievements);
+            animateXP(totalXP);
+            createConfetti();
+            
+            const achievementsMap = getAchievementsMap();
+            const achievementsList = achievements.map(key => achievementsMap[key]).filter(Boolean);
+            
+            certificateData = {
+                playerName,
+                totalXP,
+                rankKey,
+                rankName: rank.name,
+                rankIcon: rank.icon,
+                mentorName: rank.mentorName,
+                mentorTitle: rank.mentorTitle,
+                mentorAvatar: rank.mentorAvatar,
+                message: rank.message,
+                chaptersCompleted,
+                questionsCorrect,
+                accuracy,
+                achievements: achievementsList,
+                date: dateStr,
+                labels: getCertificateLabels()
+            };
+            
+            console.log('📊 Dados de conclusão carregados:', completionData);
+            console.log('🎓 Dados do certificado preparados:', certificateData);
+        }
+
+        // Dados do certificado (preenchidos em loadCompletionData)
+        let certificateData = {};
+        
+        // Expor funções globalmente para os botões
+        window.goToChapters = function() { window.location.href = 'index.html?returnToMap=true'; };
+        
+        window.downloadCertificate = async function(button) {
+            const btn = button || document.getElementById('downloadCertificateBtn');
+            if (!btn) return;
+            const originalContent = btn.innerHTML;
+            
+            try {
+                // Estado de loading
+                btn.classList.add('btn-loading');
+                btn.innerHTML = `<span class="btn-icon">⏳</span> ${t('generating')}`;
+                
+                // Gerar nome do arquivo
+                const sanitizedName = certificateData.playerName
+                    .replace(/[^a-zA-Z0-9À-ú\s]/g, '')
+                    .replace(/\s+/g, '_');
+                const filename = `${t('certificateFilenamePrefix')}_${sanitizedName}.png`;
+                
+                // Gerar e baixar usando SVG
+                await downloadCertificateAsPNG(certificateData, filename);
+                
+                // Feedback de sucesso
+                btn.innerHTML = `<span class="btn-icon">✅</span> ${t('downloaded')}`;
+                setTimeout(() => {
+                    btn.innerHTML = originalContent;
+                    btn.classList.remove('btn-loading');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Erro ao gerar certificado:', error);
+                btn.classList.remove('btn-loading');
+                btn.innerHTML = originalContent;
+                alert(t('downloadError'));
+            }
+        };
+        
+        window.replayAnimation = function() {
+            document.getElementById('confetti').replaceChildren();
+            createConfetti();
+            document.querySelectorAll('.door').forEach(door => {
+                door.style.animation = 'none';
+                door.offsetHeight;
+                door.style.animation = door.classList.contains('door-left') 
+                    ? 'doorOpenLeft 1.2s ease-out 0.3s forwards' 
+                    : 'doorOpenRight 1.2s ease-out 0.3s forwards';
+            });
+        };
+
+        document.getElementById('goToChaptersBtn')?.addEventListener('click', window.goToChapters);
+        document.getElementById('downloadCertificateBtn')?.addEventListener('click', event => {
+            window.downloadCertificate(event.currentTarget);
+        });
+        document.getElementById('replayAnimationBtn')?.addEventListener('click', window.replayAnimation);
+
+        document.addEventListener('DOMContentLoaded', loadCompletionData);
+    </script>
+</body>
+</html>

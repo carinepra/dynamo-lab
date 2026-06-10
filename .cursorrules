@@ -1,0 +1,454 @@
+# Regras do Projeto dynamodb-lab
+
+## 🎯 Princípios Fundamentais
+
+1. **SEMPRE pergunte antes de**: criar novos arquivos, refatorar código significativamente, adicionar dependências, ou implementar features não solicitadas
+2. **NÃO crie documentação desnecessária**: Evite múltiplos READMEs, arquivos de histórico, ou tutoriais não pedidos
+3. **Código limpo > Documentação extensa**: Prefira código autoexplicativo a comentários excessivos
+
+---
+
+## 1. Verificação Automática de Testes (CONTEXTUAL)
+
+### Tempos de Execução
+- **Unit Tests**: ~1 segundo (76 testes - Vitest)
+- **E2E Tests**: ~30-60 segundos (99 testes - Playwright)
+- **Total**: ~1 minuto (175 testes = 100% cobertura)
+
+### Regras por Camada
+
+#### Frontend (`quiz-web/**/*.{js,html,css}`)
+```bash
+cd quiz-web
+
+# SEMPRE rodar (1s):
+npm run test:unit:fast
+
+# Rodar E2E (1min) SE:
+# - Mudou: app.js, index.html, js/ui/*
+# - OU finalizando feature
+npm run test:e2e:fast
+```
+
+**Exceções**: `README.md`, `CHANGELOG.md` → Não rodar testes
+
+#### Backend (`copilot/backend/**/*.py`)
+```bash
+cd copilot/backend
+pytest --tb=short
+```
+
+**Exceção**: `README.md` → Não rodar testes
+
+#### Labs (`labs/**`)
+- Validar sintaxe JSON (`metadata.json`)
+- Validar sintaxe Markdown
+- **Não rodar testes** (labs não têm testes automatizados)
+
+#### Docs (`docs/**`)
+- Validar identidade visual se mudou `docs/identidade-visual/*`
+- **Não rodar testes**
+
+### Tabela de Decisão Rápida
+
+| Arquivo | Unit | E2E | Backend |
+|---------|------|-----|---------|
+| `quiz-web/js/config.js` | ✅ 1s | ❌ | ❌ |
+| `quiz-web/js/ui/*.js` | ✅ 1s | ✅ 1min | ❌ |
+| `quiz-web/app.js` | ✅ 1s | ✅ 1min | ❌ |
+| `quiz-web/index.html` | ✅ 1s | ✅ 1min | ❌ |
+| `quiz-web/style.css` | ❌ | ⚠️  | ❌ |
+| `copilot/backend/src/**/*.py` | ❌ | ❌ | ✅ |
+| `labs/**/*.md` | ❌ | ❌ | ❌ |
+
+### Full Test Suite (Antes de Commit)
+Rodar TODOS os testes quando:
+- Commit de feature completa
+- Criar/atualizar PR
+- Após resolver conflitos de merge
+- Mudanças críticas (app.js, index.html, backend core)
+
+### Se Testes Quebrarem
+1. **PARAR** - Não prosseguir
+2. **Analisar** - Ler mensagem, stack trace, arquivo/linha
+3. **Corrigir** - Resolver antes de continuar
+4. **Re-rodar** - Até 175/175 passar
+
+---
+
+## 2. Identidade Visual Aurora Academy Quest
+
+**Fonte**: `docs/identidade-visual/AURORA-ACADEMY-QUEST.md`
+
+### Paleta de Cores
+- **Primárias Aurora Labs**: `#002740` (navy), `#67d2df` (aqua), `#f9e27d` (yellow)
+- **Quest**: `#6B46C1` (roxo), `#F59E0B` (dourado), `#789d4a` (verde)
+- **Proporção**: 80% Aurora Labs + 20% Fantasy
+
+### Personagens
+- **Protagonistas**: Zelda e Link (colaboradores/estudantes)
+- **NPCs**: Arquiteto-Mor, Mestre dos Conceitos, Sacerdote
+- **❌ NUNCA**: Alice, Bruno, nomes genéricos
+
+### Sistema de Níveis
+- 🛡️ Escudeiro (0-500 XP)
+- 🗺️ Cartógrafo (501-1.000 XP)
+- ⚔️ Cavaleiro (1.001-1.500 XP)
+- 🔮 Oráculo (1.501-2.000 XP)
+- 👑 Grão-Mestre (2.001+ XP)
+
+### Ícones
+- **❌ NUNCA**: Emojis nativos HTML em produção
+- **✅ SEMPRE**: Ícones customizados de `quiz-web/js/icons.js`
+- **Formato**: SVG inline ou base64
+
+### Componentes
+- **Usar**: `docs/identidade-visual/componentes-quest.css`
+- **Classes**: `.quest-card`, `.quest-badge`, `.xp-bar`, `.mission-item`
+
+---
+
+## 3. Conformidade com Narrativa
+
+**Fonte**: regras consolidadas neste arquivo e dados em `labs/*/DESAFIOS.md`
+
+### Dados dos Personagens
+
+**Zelda**:
+- UUID: `650e8400-e29b-41d4-a716-446655440010`
+- 1 plano individual, 2 certificados, 6 meses histórico
+- Email: `zelda@email.com`, CPF: `123.456.789-01`
+
+**Link**:
+- UUID: `770e8400-e29b-41d4-a716-446655440002`
+- 2 planos corporativos (Tech Corp), 3 certificados, 1 ano histórico
+- Email: `link@techcorp.com`, CPF: `987.654.321-00`
+
+### Tom de Comunicação
+- **Educacional-corporativo** com elementos RPG sutis
+- **Contexto real**: Mostrar código Go real da Aurora Labs
+- **Comparações**: SQL vs DynamoDB (sempre ambos)
+- **Disclaimer**: "Não reflete arquitetura atual da Aurora Labs (usa MySQL)"
+
+### Estrutura dos Labs
+- **Lab 1**: Fundamentos e modelagem (45min, 15 perguntas, 1.500 XP)
+- **Lab 2**: Single Table Design e queries avançadas (50min, 13 desafios, 1.870 XP)
+- **Lab 3**: GSI (30min, 8 desafios, 1.050 XP)
+
+---
+
+## 4. Conformidade com Agenda
+
+**Fonte**: `README.md` e `labs/*/metadata.json`
+
+### Duração
+- **Total**: 3 horas
+- **Labs hands-on**: 50% (90min)
+- **Teoria**: 33% (60min)
+- **Pausas**: 6% (10min)
+
+### Estrutura de Desafios
+- **AP1-AP6**: Access Pattern Design (15min, 600 XP)
+- **Q1-Q5**: Queries Básicas (10min, 600 XP)
+- **Q6-Q11**: Queries Avançadas (25min, 1.500 XP)
+
+### XP por Tipo
+- Múltipla escolha: 50-100 XP
+- Aberta (PK/SK): 100-150 XP
+- Código prático: 200-300 XP
+
+---
+
+## 5. Padrões de Teste (18 Lições Aprendidas)
+
+### E2E Tests (Playwright) - Regras Críticas
+
+1. **`onclick` inline NÃO funciona com `.click()`**
+   ```javascript
+   // ❌ NÃO
+   await page.locator('button[onclick="func()"]').click();
+   
+   // ✅ SIM
+   await page.evaluate(() => window.func());
+   ```
+
+2. **`showFeedback()` DEVE incluir botões dinamicamente**
+   - Renderizar "Próxima Questão" ou "Ver Resultado Final"
+   - Baseado em `result.quiz_completed` e `result.next_question`
+
+3. **`page.route()` antes do fetch**
+   - Mock DEVE estar ativo ANTES da ação que dispara fetch
+
+4. **Helpers Essenciais**
+   - `selectLanguage(page, language)`: Custom select
+   - `setupApiMocks(page)`: Mock `/api/quiz/*`
+   - `setupMetadataMocks(page)`: Mock `**/labs/*/metadata.json`
+   - `startQuizDirectly(page, questionData)`: Via `evaluate()`
+
+5. **DOMContentLoaded Essencial**
+   - `app.js` DEVE ter `document.addEventListener('DOMContentLoaded', ...)`
+
+6. **Null Checks Preventivos**
+   ```javascript
+   const element = document.getElementById('id');
+   if (!element) {
+       console.error('Element not found: id');
+       return;
+   }
+   ```
+
+7. **Seletores Únicos**
+   - ❌ `#xp` (usado em SVG gradients)
+   - ✅ `#total-xp-display`
+
+### Unit Tests (Vitest)
+- Testar módulos ES6 isoladamente
+- Mock `fetch` e `localStorage` em `tests/unit/setup.js`
+- Cobertura mínima: 80% por módulo
+
+---
+
+## 6. Estrutura de Arquivos
+
+### Frontend (`quiz-web/`)
+```
+quiz-web/
+├── index.html              # HTML principal
+├── app.js                  # Orquestrador (importa módulos)
+├── style.css               # Estilos principais
+├── js/                     # Módulos ES6 (11 arquivos)
+│   ├── config.js
+│   ├── state.js
+│   ├── levels.js
+│   ├── icons.js
+│   ├── api.js
+│   ├── ui/
+│   │   ├── screens.js
+│   │   ├── feedback.js
+│   │   └── notifications.js
+│   └── utils/
+│       ├── timer.js
+│       ├── validator.js
+│       └── markdown.js
+└── tests/
+    ├── quiz.spec.js        # E2E principal
+    ├── e2e/fixtures/
+    └── unit/
+```
+
+### Backend (`copilot/backend/`)
+```
+backend/src/
+├── main.py
+├── api/quiz_routes.py
+├── models/schemas.py
+├── quiz/
+├── storage/database.py
+└── validators/
+```
+
+---
+
+## 7. Padrões de Código
+
+### JavaScript/ES6
+
+**Módulos**:
+```javascript
+// Usar export/import ES6
+export function myFunc() { ... }
+
+// Expor globalmente para testes
+window.myFunc = myFunc;
+```
+
+**Null Safety (DOM)**:
+```javascript
+const element = document.getElementById('id');
+if (!element) {
+    console.error('Element not found: id');
+    return;
+}
+```
+
+**Async/Await (APIs/I-O)**:
+```javascript
+async function fetchData() {
+    try {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('HTTP error');
+        return await response.json();
+    } catch (error) {
+        console.error('Fetch error:', error);
+        showNotification('Erro ao carregar dados', 'error');
+    }
+}
+```
+
+**Event Listeners**:
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+    initApp();
+});
+```
+
+### Python
+
+**Type Hints**:
+```python
+def validate_answer(code: str, question_id: str) -> dict:
+    ...
+```
+
+**Error Handling (APIs/I-O)**:
+```python
+try:
+    result = dangerous_operation()
+except SpecificError as e:
+    logger.error(f"Error: {e}")
+    raise
+```
+
+### DynamoDB
+
+**Access Pattern First**:
+- Modelar pelos USOS (não entidades)
+- Documentar access patterns antes de criar estrutura
+
+**Nomenclatura PK/SK**:
+```
+EMPLOYEE#<uuid>      + SUMMARY
+EMPLOYEE#<uuid>      + PLAN#<uuid>
+PLAN#<uuid>          + CERTIFICATE#<uuid>
+CERTIFICATE#<uuid>   + BALANCE#YYYY-MM-DD
+```
+
+**Queries**:
+- Preferir `Query` sobre `Scan`
+- Usar `begins_with` para hierarquias
+- Usar `ScanIndexForward=false` para últimos items
+- Sempre com `Limit`
+
+---
+
+## 8. Error Handling (Balanceado)
+
+### SEMPRE usar try-catch:
+- ✅ Chamadas de API (`fetch`, `axios`)
+- ✅ Operações de I/O (arquivos)
+- ✅ `JSON.parse()` de dados externos
+- ✅ `localStorage.getItem()` / `setItem()`
+
+### SEMPRE usar null checks:
+- ✅ `document.getElementById()` e seletores DOM
+- ✅ Propriedades de objetos opcionais
+- ✅ Resultados de `array.find()`
+
+### SEMPRE validar:
+- ✅ Input do usuário (formulários)
+- ✅ Parâmetros de função pública
+- ✅ Dados de API antes de usar
+
+### NÃO precisa:
+- ❌ Operações matemáticas simples
+- ❌ Lógica interna de módulos (já validada)
+- ❌ Constantes conhecidas
+
+---
+
+## 9. Regras de Criação de Arquivos
+
+### SEMPRE Perguntar Antes de:
+1. Criar novos arquivos (exceto se explicitamente solicitado)
+2. Refatorar código existente significativamente
+3. Mudar estrutura de pastas
+4. Adicionar dependências (`package.json`, `requirements.txt`)
+5. Criar novos componentes ou módulos
+6. Implementar features não solicitadas
+
+### ❌ NÃO Criar:
+- Múltiplos READMEs redundantes
+- Arquivos de "histórico" ou "log" a cada alteração
+- Documentação excessiva de código óbvio
+- Tutoriais não solicitados
+- Diagramas complexos não pedidos
+- `NOTES.md`, `TODO.md`, `HISTORY.md`
+
+### ✅ PODE Criar (se necessário):
+- Comentários inline para lógica complexa
+- JSDoc para funções públicas de API
+- README quando criar nova pasta/módulo significativo
+- CHANGELOG quando feature completa for entregue
+
+**Princípio**: Código limpo e autoexplicativo > Documentação extensa
+
+---
+
+## 10. Regras de Performance
+
+### Frontend (quiz-web/)
+
+**❌ NÃO**:
+- Queries DOM dentro de loops
+- Event listeners sem debounce em inputs de busca
+- Renderizar listas grandes sem virtualização
+- Múltiplas queries idênticas ao mesmo endpoint
+
+**✅ SIM**:
+- Cachear seletores DOM
+  ```javascript
+  const item = document.getElementById('item');
+  for (let i = 0; i < 100; i++) {
+      item.textContent = i;
+  }
+  ```
+- Debounce em inputs (300-500ms)
+- `DocumentFragment` para múltiplos appends
+- Lazy loading para imagens
+- Cachear respostas de API
+
+### Backend (copilot/backend/)
+
+**❌ NÃO**:
+- Queries no banco dentro de loops (N+1 problem)
+- `Scan` completo em tabelas grandes
+- Carregar todos os resultados em memória
+- Operações síncronas bloqueantes
+
+**✅ SIM**:
+- Batch operations
+- `Query` com `Limit` e paginação
+- Stream de dados grandes
+- Operações assíncronas (async/await)
+
+### DynamoDB
+
+**❌ NÃO**:
+- `Scan` em produção (exceto jobs batch offline)
+- `GetItem` em loop (usar `BatchGetItem`)
+- Queries sem `Limit`
+- Hot partitions (mesma PK em alta frequência)
+
+**✅ SIM**:
+- `Query` com `begins_with` ao invés de múltiplos `GetItem`
+- `BatchGetItem` para múltiplos items (até 100)
+- `ProjectionExpression` para reduzir dados transferidos
+- Distribuir carga entre partitions
+
+---
+
+## 📚 Referências Rápidas
+
+- **Identidade Visual**: `docs/identidade-visual/AURORA-ACADEMY-QUEST.md`
+- **Narrativa**: regras consolidadas neste arquivo e `labs/*/DESAFIOS.md`
+- **Agenda**: `README.md` e `labs/*/metadata.json`
+- **Testes**: `quiz-web/GUIA-RODAR-TESTES.md`
+- **Icons**: `quiz-web/js/icons.js`
+- **Componentes**: `docs/identidade-visual/componentes-quest.css`
+
+---
+
+**Versão**: 1.0  
+**Última atualização**: Novembro 2025  
+**Métricas de sucesso**: 175/175 testes passando (100% cobertura)
+

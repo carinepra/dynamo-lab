@@ -1,0 +1,494 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "metadata": {
+    "lab": "lab2",
+    "title": "Single Table Design Completo",
+    "version": "2.2.0",
+    "total_xp": 1870,
+    "total_challenges": 13,
+    "duration_minutes": 50,
+    "description": "Arquitetura, Modelagem, Queries e Patterns Avançados"
+  },
+  "challenges": {
+    "Q1_lab2": {
+      "id": "Q1_lab2",
+      "title": "Access Pattern First",
+      "chapter": "arquitetura",
+      "difficulty": "⭐ Iniciante",
+      "xp": 80,
+      "type": "multiple_choice",
+      "question": "Você está modelando a tabela de funcionários. Qual é a PRIMEIRA coisa que você deve fazer no DynamoDB?",
+      "options": [
+        "Criar as tabelas (Employee, Plan, Certificate)",
+        "Listar os access patterns (queries que serão feitas)",
+        "Definir PK e SK genéricos",
+        "Normalizar os dados (3NF)"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Access Pattern First! DynamoDB é otimizado para queries específicas. Liste as queries ANTES de modelar.\n\n---\n\n❌ **A) Criar as tabelas primeiro:**\nIsso é mentalidade SQL! No DynamoDB, criar tabelas antes de saber as queries leva a modelagem ruim. Você pode acabar com múltiplas tabelas quando uma bastaria, ou com chaves que não atendem seus access patterns.\n\n❌ **C) Definir PK e SK genéricos:**\nPK/SK genéricos (como 'id' e 'type') parecem flexíveis, mas prejudicam performance. Sem saber as queries, você não sabe se precisa de GSI, como estruturar hierarquias, ou qual granularidade usar nas chaves.\n\n❌ **D) Normalizar os dados (3NF):**\nNormalização é paradigma SQL! DynamoDB favorece denormalização. Normalizar primeiro significa que você terá que 'desnormalizar' depois, quando perceber que precisa de JOINs que o DynamoDB não suporta.",
+      "hints": ["DynamoDB é otimizado para queries específicas", "SQL modela entidades depois queries. DynamoDB inverte essa ordem"],
+      "translations": {
+        "en": {
+          "title": "Access Pattern First",
+          "question": "You are modeling the employee table. What is the FIRST thing you should do in DynamoDB?",
+          "options": [
+            "Create the tables (Employee, Plan, Certificate)",
+            "List the access patterns (queries that will be executed)",
+            "Define generic PK and SK values",
+            "Normalize the data (3NF)"
+          ],
+          "explanation": "Access Pattern First. DynamoDB is optimized for specific queries, so list the queries before modeling the keys and items.",
+          "hints": ["DynamoDB is optimized for specific queries", "SQL models entities first; DynamoDB reverses that order"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["access-pattern", "modelagem"]
+    },
+    "Q2_lab2": {
+      "id": "Q2_lab2",
+      "title": "Single Table Design",
+      "chapter": "arquitetura",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Sistema tem 3 entidades: Employee, Plan, Certificate. Como organizá-las no DynamoDB?",
+      "options": [
+        "3 tabelas DynamoDB (employees, plans, certificates)",
+        "1 tabela com atributo 'type' (EMPLOYEE, PLAN, CERTIFICATE)",
+        "1 tabela com PK/SK hierárquicos (EMPLOYEE#uuid → PLAN#uuid → CERTIFICATE#uuid)",
+        "3 tabelas + 1 tabela de relacionamentos"
+      ],
+      "correct_answer": "C",
+      "correct_index": 2,
+      "explanation": "Single Table Design = Todas as entidades em 1 tabela! PK/SK hierárquicos permitem queries eficientes.\n\n---\n\n❌ **A) 3 tabelas DynamoDB separadas:**\nIsso replica o modelo SQL! No DynamoDB você paga por tabela e perde a capacidade de buscar dados relacionados em 1 query. Para buscar employee + plans, precisaria de 2 queries em tabelas diferentes.\n\n❌ **B) 1 tabela com atributo 'type':**\nMelhor que 3 tabelas, mas não aproveita o poder do SK! Colocar 'type' como atributo comum significa que você não pode usar Query para filtrar por tipo - precisaria de FilterExpression ou Scan, que são ineficientes.\n\n❌ **D) 3 tabelas + tabela de relacionamentos:**\nIsso é modelo relacional puro! Pior dos mundos: 4 tabelas, múltiplas queries, complexidade de manter relacionamentos. DynamoDB não é banco relacional - não tente usá-lo como um.",
+      "hints": ["Pense em como evitar múltiplas queries", "1 Query pode buscar o item principal + relacionamentos juntos"],
+      "translations": {
+        "en": {
+          "title": "Single Table Design",
+          "question": "The system has 3 entities: Employee, Plan, and Certificate. How should they be organized in DynamoDB?",
+          "options": [
+            "3 DynamoDB tables (employees, plans, certificates)",
+            "1 table with a 'type' attribute (EMPLOYEE, PLAN, CERTIFICATE)",
+            "1 table with hierarchical PK/SK values (EMPLOYEE#uuid -> PLAN#uuid -> CERTIFICATE#uuid)",
+            "3 tables plus 1 relationship table"
+          ],
+          "explanation": "Single Table Design stores related entities in one table. Hierarchical PK/SK values allow efficient queries across related items.",
+          "hints": ["Think about avoiding multiple queries", "One Query can fetch the main item plus related items"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["single-table", "modelagem"]
+    },
+    "Q3_lab2": {
+      "id": "Q3_lab2",
+      "title": "Hierarquias 1-to-Many",
+      "chapter": "arquitetura",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 120,
+      "type": "multiple_choice",
+      "question": "1 Employee tem N Plans. Cada Plan tem M Certificates. Qual modelagem atende: listar plans de 1 employee, listar certificates de 1 plan, buscar 1 certificate específico?",
+      "options": [
+        "PK=EMPLOYEE#uuid SK=PLAN#uuid e PK=PLAN#uuid SK=CERTIFICATE#uuid",
+        "PK=EMPLOYEE#uuid SK=type (type='PLAN' ou 'CERTIFICATE')",
+        "PK=uuid SK=parent_uuid",
+        "PK=EMPLOYEE#uuid SK tudo denormalizado em 1 item"
+      ],
+      "correct_answer": "A",
+      "correct_index": 0,
+      "explanation": "Hierarquia de 2 níveis: cada filho vira parent do próximo. Employee→Plan (PK=EMPLOYEE), Plan→Certificate (PK=PLAN).\n\n---\n\n❌ **B) PK=EMPLOYEE#uuid SK=type:**\nIsso não modela hierarquia de 3 níveis! Com SK='PLAN' ou 'CERTIFICATE', você não consegue listar certificates DE UM PLAN específico - todos os certificates ficariam misturados sob o employee.\n\n❌ **C) PK=uuid SK=parent_uuid:**\nEstrutura genérica demais! Para listar plans de um employee, você precisaria saber todos os UUIDs dos plans. E para buscar certificates de um plan, idem. Não permite Query eficiente por hierarquia.\n\n❌ **D) Tudo denormalizado em 1 item:**\nItem de 400KB não suporta N plans com M certificates cada! Além disso, atualizar 1 certificate exigiria reescrever o item inteiro. Denormalização tem limites - hierarquias profundas precisam de items separados.",
+      "hints": ["Hierarquia tem 3 níveis: Employee → Plans → Certificates", "O 'filho' de um nível vira o 'pai' do próximo"],
+      "translations": {
+        "en": {
+          "title": "1-to-Many Hierarchies",
+          "question": "One Employee has many Plans. Each Plan has many Certificates. Which model supports listing plans for one employee, certificates for one plan, and one specific certificate?",
+          "options": [
+            "PK=EMPLOYEE#uuid SK=PLAN#uuid and PK=PLAN#uuid SK=CERTIFICATE#uuid",
+            "PK=EMPLOYEE#uuid SK=type (type='PLAN' or 'CERTIFICATE')",
+            "PK=uuid SK=parent_uuid",
+            "PK=EMPLOYEE#uuid with everything denormalized into one item"
+          ],
+          "explanation": "Use a two-level hierarchy: each child can become the parent of the next level. Employee -> Plan and Plan -> Certificate.",
+          "hints": ["The hierarchy has three levels: Employee -> Plans -> Certificates", "The child of one level becomes the parent of the next"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["hierarquia", "1-to-many"]
+    },
+    "Q4_lab2": {
+      "id": "Q4_lab2",
+      "title": "Denormalização",
+      "chapter": "arquitetura",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Campo company_name: 1000 leituras/dia, 1 escrita/ano, 10.000 employees. Denormalizar ou normalizar?",
+      "options": [
+        "DENORMALIZAR (copiar para 10k items)",
+        "NORMALIZAR (1 item + query extra)",
+        "Cache Redis",
+        "Depende do tamanho do campo"
+      ],
+      "correct_answer": "A",
+      "correct_index": 0,
+      "explanation": "Ratio = 365,000:1. Denormalizar! Regra: Ratio > 100 → DENORMALIZAR.\n\n---\n\n❌ **B) NORMALIZAR (1 item + query extra):**\nCom ratio de 365.000:1, normalizar significa 365.000 queries extras por ano para buscar company_name! A atualização anual não justifica esse overhead. Denormalizar custa 10k writes UMA vez por ano.\n\n❌ **C) Cache Redis:**\nAdiciona complexidade desnecessária! Cache faz sentido para dados que mudam frequentemente E são lidos muito. Aqui, o dado quase não muda - denormalizar resolve sem infraestrutura extra, sem invalidação de cache, sem ponto de falha adicional.\n\n❌ **D) Depende do tamanho do campo:**\nO tamanho do campo é irrelevante para esta decisão! Um company_name de 100 bytes vs 50 bytes não muda o cálculo. O que importa é o ratio leitura/escrita. Com 365.000:1, denormalize independente do tamanho.",
+      "hints": ["Compare frequência de leituras vs escritas", "Se lê muito e muda pouco, denormalize"],
+      "translations": {
+        "en": {
+          "title": "Denormalization",
+          "question": "company_name is read 1000 times/day, written once/year, and used by 10,000 employees. Denormalize or normalize?",
+          "options": [
+            "DENORMALIZE (copy to 10k items)",
+            "NORMALIZE (1 item plus an extra query)",
+            "Use Redis cache",
+            "It depends on the field size"
+          ],
+          "explanation": "The read/write ratio is extremely high, so denormalization is the right trade-off. Read-heavy and rarely changing data should be copied.",
+          "hints": ["Compare read frequency versus write frequency", "If it is read often and rarely changes, denormalize"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["denormalizacao", "trade-offs"]
+    },
+    "Q5_lab2": {
+      "id": "Q5_lab2",
+      "title": "Problema N+1",
+      "chapter": "arquitetura",
+      "difficulty": "⭐⭐⭐⭐⭐ Expert",
+      "xp": 120,
+      "type": "multiple_choice",
+      "question": "Home do app lista 100 funcionários + 3 planos cada. SQL faz 1 query de 280ms; DynamoDB faz 100 queries paralelas de 10ms cada. Qual é mais rápido?",
+      "options": [
+        "SQL (1 query vs 100)",
+        "DynamoDB (100 queries paralelas = ~10ms total)",
+        "Empate (280ms vs 1000ms)",
+        "Depende do volume da tabela"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Paralelismo muda a conta: 100 queries paralelas de 10ms tendem ao tempo máximo individual, não à soma. Em DynamoDB, access patterns bem distribuídos podem executar em paralelo com latência previsível.\n\n---\n\n❌ **A) SQL (1 query vs 100):**\nQuantidade de queries não é o único fator. Uma query SQL com joins pode levar 280ms, enquanto 100 queries DynamoDB independentes podem rodar em paralelo e terminar perto de 10ms.\n\n❌ **C) Empate (280ms vs 1000ms):**\n1000ms seria a soma sequencial das queries. O cenário descreve execução paralela, então a latência esperada fica próxima da query mais lenta do lote.\n\n❌ **D) Depende do volume da tabela:**\nVolume importa, mas a pergunta já fornece latências. Com os números dados e execução paralela, DynamoDB é mais rápido neste cenário.",
+      "hints": ["Some o tempo apenas quando as queries são sequenciais", "Em paralelo, o tempo total se aproxima da query mais lenta"],
+      "translations": {
+        "en": {
+          "title": "N+1 Problem",
+          "question": "The app home lists 100 employees plus 3 plans each. SQL uses 1 query taking 280ms; DynamoDB uses 100 parallel queries taking 10ms each. Which is faster?",
+          "options": [
+            "SQL (1 query vs 100)",
+            "DynamoDB (100 parallel queries ~= 10ms total)",
+            "Tie (280ms vs 1000ms)",
+            "It depends on table size"
+          ],
+          "explanation": "Parallelism changes the math. Parallel DynamoDB requests tend toward the slowest individual request, not the sum of all requests.",
+          "hints": ["Sum times only when queries are sequential", "In parallel, total time approaches the slowest query"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["n-plus-one", "paralelismo", "performance"]
+    },
+    "Q6_lab2": {
+      "id": "Q6_lab2",
+      "title": "Ordenação de Resultados",
+      "chapter": "queries",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Você quer listar certificados em ordem DECRESCENTE (mais recente primeiro). Qual parâmetro usar?",
+      "options": [
+        "ScanIndexForward=true (ordem crescente, padrão)",
+        "ScanIndexForward=false (ordem decrescente)",
+        "Limit=1 e Order='DESC'",
+        "Fazer Scan e ordenar no código da aplicação"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "ScanIndexForward=false inverte a ordem do SK. True = A→Z (padrão), False = Z→A (reverso).\n\n---\n\n❌ **A) ScanIndexForward=true:**\nIsso é o PADRÃO e resulta em ordem CRESCENTE (A→Z, antigo→recente). Se quer o mais recente primeiro, precisa de false para inverter a ordem do Sort Key.\n\n❌ **C) Limit=1 e Order='DESC':**\nNão existe parâmetro 'Order' no DynamoDB! Isso é sintaxe SQL. O DynamoDB usa ScanIndexForward para controlar direção. Limit=1 limita quantidade, não ordena.\n\n❌ **D) Scan e ordenar no código:**\nPéssima ideia! Scan lê a tabela INTEIRA, consumindo muito RCU e tempo. Depois ordenar no código adiciona latência e uso de memória. DynamoDB já ordena pelo SK - use ScanIndexForward=false!",
+      "hints": ["DynamoDB pode ordenar resultados automaticamente pela Sort Key", "Existe um parâmetro booleano que controla a direção"],
+      "translations": {
+        "en": {
+          "title": "Result Ordering",
+          "question": "You want to list certificates in DESCENDING order (newest first). Which parameter should you use?",
+          "options": [
+            "ScanIndexForward=true (ascending order, default)",
+            "ScanIndexForward=false (descending order)",
+            "Limit=1 and Order='DESC'",
+            "Scan and sort in application code"
+          ],
+          "explanation": "ScanIndexForward=false reverses Sort Key order. True means ascending; false means descending.",
+          "hints": ["DynamoDB can order results by Sort Key", "A boolean parameter controls the direction"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["scanindexforward", "ordenacao"]
+    },
+    "Q7_lab2": {
+      "id": "Q7_lab2",
+      "title": "Buscar Range de Dados",
+      "chapter": "queries",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Listar saldos apenas do primeiro semestre de 2024 (Jan a Jun). SKs: BALANCE#2024-01, BALANCE#2024-02, ... Como buscar?",
+      "options": [
+        "Query com SK begins_with 'BALANCE#' + filtrar no código",
+        "Query com SK between 'BALANCE#2024-01' AND 'BALANCE#2024-06'",
+        "GetItem para cada mês (6 requisições separadas)",
+        "Query sem SK + FilterExpression no mês"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "BETWEEN permite buscar um range de valores no SK. Eficiente e economiza 50% de RCU comparado a ler tudo!\n\n---\n\n❌ **A) begins_with + filtrar no código:**\nFunciona, mas é ineficiente! begins_with('BALANCE#') retorna TODOS os meses (12), você paga RCU por todos, depois descarta 6 no código. BETWEEN lê apenas os 6 meses necessários.\n\n❌ **C) GetItem para cada mês:**\n6 requisições separadas = 6x mais latência de rede! Além disso, GetItem exige PK+SK exatos. Query com BETWEEN faz tudo em 1 requisição, 1 round-trip.\n\n❌ **D) Query sem SK + FilterExpression:**\nQuery sem filtro de SK retorna TODOS os items do PK! FilterExpression filtra DEPOIS de ler - você paga RCU por tudo. BETWEEN filtra DURANTE a leitura, muito mais eficiente.",
+      "hints": ["DynamoDB tem operador específico para buscar ranges: BETWEEN", "BETWEEN é inclusivo: inclui início E fim"],
+      "translations": {
+        "en": {
+          "title": "Query a Data Range",
+          "question": "List balances only for the first half of 2024 (Jan to Jun). SKs are BALANCE#2024-01, BALANCE#2024-02, and so on. How should you query?",
+          "options": [
+            "Query with SK begins_with 'BALANCE#' and filter in code",
+            "Query with SK between 'BALANCE#2024-01' AND 'BALANCE#2024-06'",
+            "GetItem for each month (6 separate requests)",
+            "Query without SK and use FilterExpression on the month"
+          ],
+          "explanation": "BETWEEN retrieves a range of Sort Key values efficiently and avoids reading unnecessary months.",
+          "hints": ["DynamoDB has a specific operator for ranges: BETWEEN", "BETWEEN is inclusive"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["between", "range", "query"]
+    },
+    "Q8_lab2": {
+      "id": "Q8_lab2",
+      "title": "Limitar Quantidade de Resultados",
+      "chapter": "queries",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Home do app quer apenas os 5 planos mais recentes (ela tem 10 planos). Como limitar para retornar apenas 5?",
+      "options": [
+        "Query sem mudanças + filtrar no código (pegar só 5 do array)",
+        "Query com Limit=5 (DynamoDB retorna apenas 5)",
+        "Query com FilterExpression limitando a 5",
+        "Fazer 5 GetItem separados para cada plano"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Limit controla quantos items o DynamoDB retorna, economizando dados e RCU!\n\n---\n\n❌ **A) Filtrar no código:**\nFunciona, mas desperdiça recursos! Você paga RCU pelos 10 items, transfere 10 pela rede, depois descarta 5. Com Limit=5, o DynamoDB para de ler após 5 items - metade do custo e dados.\n\n❌ **C) FilterExpression limitando a 5:**\nFilterExpression não limita quantidade! Ele filtra por CONDIÇÃO (ex: status='ACTIVE'). Não existe FilterExpression='count <= 5'. Para limitar quantidade, use Limit.\n\n❌ **D) 5 GetItems separados:**\nSó funciona se você sabe exatamente quais 5 planos quer! Para 'os 5 mais recentes', você não sabe os IDs antecipadamente. Além disso, 5 requisições = 5x mais latência que 1 Query com Limit=5.",
+      "hints": ["Existe um parâmetro que diz 'pare após retornar N items'", "O parâmetro faz o DynamoDB parar de ler após N items"],
+      "translations": {
+        "en": {
+          "title": "Limit Result Count",
+          "question": "The app home needs only the 5 most recent plans, but there are 10. How should you limit the response to 5?",
+          "options": [
+            "Run Query normally and keep only 5 items in code",
+            "Run Query with Limit=5",
+            "Run Query with FilterExpression limiting to 5",
+            "Make 5 separate GetItem calls"
+          ],
+          "explanation": "Limit controls how many items DynamoDB returns, reducing read work and transferred data.",
+          "hints": ["There is a parameter that says stop after N items", "It makes DynamoDB stop reading after N items"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["limit", "paginacao"]
+    },
+    "Q9_lab2": {
+      "id": "Q9_lab2",
+      "title": "Filtrar por Atributos Não-Chave",
+      "chapter": "queries",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Listar apenas planos com status='ACTIVE'. Status NÃO é chave. Como filtrar?",
+      "options": [
+        "Query com SK begins_with 'PLAN#' + filtrar status no código",
+        "Query com SK begins_with 'PLAN#' + FilterExpression='status = ACTIVE'",
+        "GetItem para cada plano e verificar status",
+        "Scan na tabela inteira com FilterExpression='status = ACTIVE'"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "FilterExpression filtra por atributos não-chave. ATENÇÃO: NÃO economiza RCU! Lê tudo antes de filtrar.\n\n---\n\n❌ **A) Filtrar no código:**\nFunciona, mas transfere dados desnecessários pela rede! Com FilterExpression, o DynamoDB filtra ANTES de retornar - você recebe apenas os items relevantes. Menos dados = menos latência.\n\n❌ **C) GetItem para cada plano:**\nSó funciona se você sabe todos os IDs! E GetItem não filtra - retorna o item inteiro. Você teria que fazer N requisições e depois verificar status de cada um. Muito ineficiente.\n\n❌ **D) Scan na tabela inteira:**\nScan varre TODA a tabela, não apenas os planos do employee! É caro, lento, e consome muito RCU. Query vai direto à partição do PK. Nunca use Scan quando Query resolve.",
+      "hints": ["Existe parâmetro para filtrar por atributos que não são chaves", "FilterExpression filtra DEPOIS da Query, ANTES de retornar"],
+      "translations": {
+        "en": {
+          "title": "Filter by Non-Key Attributes",
+          "question": "List only plans with status='ACTIVE'. Status is NOT a key. How should you filter?",
+          "options": [
+            "Query with SK begins_with 'PLAN#' and filter status in code",
+            "Query with SK begins_with 'PLAN#' and FilterExpression='status = ACTIVE'",
+            "GetItem for each plan and check status",
+            "Scan the whole table with FilterExpression='status = ACTIVE'"
+          ],
+          "explanation": "FilterExpression filters by non-key attributes after the Query reads items but before the response is returned. It does not reduce RCU.",
+          "hints": ["There is a parameter for non-key attributes", "FilterExpression filters after Query, before returning data"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["filterexpression", "filtro"]
+    },
+    "Q10_lab2": {
+      "id": "Q10_lab2",
+      "title": "Home do App Completa",
+      "chapter": "avancado",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 200,
+      "type": "multiple_choice",
+      "question": "Link faz login. Como mostrar dados do employee + planos em 1 Query?",
+      "options": [
+        "2 queries: GetItem para employee, Query para planos",
+        "1 Query com PK=EMPLOYEE#uuid (retorna SUMMARY + todos PLAN#*)",
+        "1 Scan filtrando por employee_uuid",
+        "Denormalizar tudo em 1 item gigante"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Single Table Magic: com SUMMARY e PLAN# sob a mesma PK do employee, uma Query por PK retorna os dados principais e os planos relacionados em uma única chamada.\n\n---\n\n❌ **A) 2 queries:**\nFunciona, mas perde a principal vantagem da modelagem single table. Se os itens relacionados já compartilham a mesma PK, uma Query basta.\n\n❌ **C) Scan filtrando por employee_uuid:**\nScan varre a tabela inteira antes de filtrar, consumindo mais RCU e aumentando latência. Query vai direto à partição do employee.\n\n❌ **D) Denormalizar tudo em 1 item gigante:**\nPode estourar limite de 400KB e dificulta atualizar planos separadamente. Items relacionados com mesma PK preservam flexibilidade e eficiência.",
+      "hints": ["Pense em agrupar dados que são lidos juntos sob a mesma PK", "SUMMARY e PLAN# podem conviver na mesma partição lógica"],
+      "translations": {
+        "en": {
+          "title": "Complete App Home",
+          "question": "Link logs in. How can you show employee data plus plans in 1 Query?",
+          "options": [
+            "2 queries: GetItem for employee, Query for plans",
+            "1 Query with PK=EMPLOYEE#uuid (returns SUMMARY plus all PLAN#*)",
+            "1 Scan filtered by employee_uuid",
+            "Denormalize everything into one giant item"
+          ],
+          "explanation": "With SUMMARY and PLAN# items under the same employee PK, one Query returns the main data and related plans together.",
+          "hints": ["Group data read together under the same PK", "SUMMARY and PLAN# can live in the same logical partition"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["single-table", "home", "query"]
+    },
+    "Q11_lab2": {
+      "id": "Q11_lab2",
+      "title": "Detalhes Completos do Plano",
+      "chapter": "avancado",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 250,
+      "type": "multiple_choice",
+      "question": "Buscar TUDO do plano em 1 QUERY: SUMMARY + PROPOSAL + DOCUMENT + CERTIFICATEs. Como?",
+      "options": [
+        "4 queries separadas, uma para cada tipo",
+        "1 Query com PK=PLAN#uuid (retorna todos os tipos)",
+        "1 Scan com FilterExpression por plan_uuid",
+        "BatchGetItem para cada item"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Single Table Magic! Query só com PK traz TUDO: SUMMARY, PROPOSAL, DOCUMENT, CERTIFICATEs. 5 items, 5 types, 1 query!\n\n---\n\n❌ **A) 4 queries separadas:**\n4 queries = 4x mais latência de rede! No Single Table Design, todos os items do plano têm o mesmo PK. Uma única Query sem filtro de SK retorna tudo em 1 requisição.\n\n❌ **C) Scan com FilterExpression:**\nScan varre a tabela INTEIRA! Se você tem 1 milhão de items e quer 5 do plano, o Scan lê 1 milhão para retornar 5. Query vai direto à partição do PK - lê apenas os items relevantes.\n\n❌ **D) BatchGetItem para cada item:**\nBatchGetItem exige conhecer TODAS as chaves antecipadamente! Você precisaria saber quantos certificates existem e seus IDs. Query com apenas PK retorna TODOS os items automaticamente, sem saber quantos são.",
+      "hints": ["Todos os items do plano têm o mesmo PK: PLAN#uuid", "Sem filtro de SK retorna todos os items"],
+      "translations": {
+        "en": {
+          "title": "Full Plan Details",
+          "question": "Fetch EVERYTHING for a plan in 1 Query: SUMMARY + PROPOSAL + DOCUMENT + CERTIFICATEs. How?",
+          "options": [
+            "4 separate queries, one for each type",
+            "1 Query with PK=PLAN#uuid (returns all types)",
+            "1 Scan with FilterExpression by plan_uuid",
+            "BatchGetItem for each item"
+          ],
+          "explanation": "All plan items share PK=PLAN#uuid. A Query by that PK returns all related item types without knowing each key in advance.",
+          "hints": ["All plan items share PK=PLAN#uuid", "Without an SK filter, Query returns all items under that PK"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["single-table", "magic"]
+    },
+    "Q12_lab2": {
+      "id": "Q12_lab2",
+      "title": "Buscar Último Saldo",
+      "chapter": "avancado",
+      "difficulty": "⭐⭐⭐⭐⭐ Expert",
+      "xp": 300,
+      "type": "multiple_choice",
+      "question": "Buscar o saldo MAIS RECENTE de um certificado. Como fazer sem ORDER BY?",
+      "options": [
+        "Scan toda tabela, ordenar no cliente, pegar primeiro",
+        "Query com ScanIndexForward=false e Limit=1",
+        "GetItem com SK='BALANCE#latest'",
+        "Query com BETWEEN pegando todos saldos e ordenar no código"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Query Reversa! ScanIndexForward=false + Limit=1 = último item. Pattern MAIS USADO no DynamoDB! 3ms, 1 RCU.\n\n---\n\n❌ **A) Scan + ordenar no cliente:**\nPior opção! Scan lê a tabela inteira, transfere tudo pro cliente, ordena em memória, depois pega 1. Pode ser milhões de items para retornar 1! Absurdamente caro e lento.\n\n❌ **C) GetItem com SK='BALANCE#latest':**\nSó funciona se você MANTÉM um item 'latest' atualizado! Exige escrita extra a cada novo saldo. Com Query Reversa, não precisa manter item especial - o DynamoDB encontra o último automaticamente pelo SK ordenado.\n\n❌ **D) Query + BETWEEN + ordenar no código:**\nBETWEEN retorna múltiplos items, você paga RCU por todos, transfere todos pela rede, depois pega 1. ScanIndexForward=false + Limit=1 lê apenas 1 item direto - muito mais eficiente!",
+      "hints": ["ScanIndexForward=false inverte a ordem do SK", "Limit=1 pega apenas o primeiro resultado (que será o último cronologicamente)"],
+      "translations": {
+        "en": {
+          "title": "Find Latest Balance",
+          "question": "How do you fetch the MOST RECENT balance of a certificate without ORDER BY?",
+          "options": [
+            "Scan the whole table, sort on the client, take the first item",
+            "Query with ScanIndexForward=false and Limit=1",
+            "GetItem with SK='BALANCE#latest'",
+            "Query with BETWEEN, fetch all balances, and sort in code"
+          ],
+          "explanation": "Reverse Query with ScanIndexForward=false plus Limit=1 returns the latest item by Sort Key efficiently.",
+          "hints": ["ScanIndexForward=false reverses SK order", "Limit=1 returns only the first result, which is chronologically latest"]
+        }
+      },
+      "timer_seconds": 150,
+      "tags": ["query-reversa", "time-series"]
+    },
+    "Q13_lab2": {
+      "id": "Q13_lab2",
+      "title": "Histórico dos Últimos Meses",
+      "chapter": "avancado",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 200,
+      "type": "multiple_choice",
+      "question": "Buscar saldos de set/out/nov 2024 (últimos 3 meses). Qual operador usar?",
+      "options": [
+        "SK = 'BALANCE#2024-09' OR SK = 'BALANCE#2024-10' OR SK = 'BALANCE#2024-11'",
+        "SK >= 'BALANCE#2024-09-01'",
+        "SK begins_with('BALANCE#2024')",
+        "FilterExpression com data >= '2024-09-01'"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Operador >= funciona no SK! Retorna todos os items a partir de set/2024. Eficiente para histórico.\n\n---\n\n❌ **A) SK = ... OR SK = ... OR SK = ...:**\nOR não funciona em KeyConditionExpression! DynamoDB não suporta múltiplos valores de SK com OR. Você precisaria de 3 queries separadas. Com >= você faz tudo em 1 query.\n\n❌ **C) begins_with('BALANCE#2024'):**\nRetorna o ANO INTEIRO (12 meses), não apenas os 3 últimos! Você pagaria RCU por 12 meses quando só precisa de 3. O operador >= é mais preciso para 'a partir de'.\n\n❌ **D) FilterExpression com data:**\nFilterExpression filtra DEPOIS de ler! O DynamoDB lê todos os saldos, consome RCU, depois aplica o filtro. Com >= no SK (KeyCondition), o filtro é aplicado DURANTE a leitura - muito mais eficiente.",
+      "hints": ["DynamoDB suporta operadores de comparação no SK", "Maior ou igual (>=) é perfeito para 'a partir de'"],
+      "translations": {
+        "en": {
+          "title": "Last Months History",
+          "question": "Fetch balances from Sep/Oct/Nov 2024 (last 3 months). Which operator should you use?",
+          "options": [
+            "SK = 'BALANCE#2024-09' OR SK = 'BALANCE#2024-10' OR SK = 'BALANCE#2024-11'",
+            "SK >= 'BALANCE#2024-09-01'",
+            "SK begins_with('BALANCE#2024')",
+            "FilterExpression with date >= '2024-09-01'"
+          ],
+          "explanation": "Comparison operators work on the Sort Key. Using >= returns items from the selected point onward in one efficient Query.",
+          "hints": ["DynamoDB supports comparison operators on SK", "Greater than or equal is ideal for 'from this point onward'"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["comparadores", "time-series"]
+    }
+  },
+  "progression": {
+    "order": ["Q1_lab2", "Q2_lab2", "Q3_lab2", "Q4_lab2", "Q5_lab2", "Q6_lab2", "Q7_lab2", "Q8_lab2", "Q9_lab2", "Q10_lab2", "Q11_lab2", "Q12_lab2", "Q13_lab2"],
+    "prerequisites": {
+      "Q1_lab2": [],
+      "Q2_lab2": ["Q1_lab2"],
+      "Q3_lab2": ["Q2_lab2"],
+      "Q4_lab2": ["Q3_lab2"],
+      "Q5_lab2": ["Q4_lab2"],
+      "Q6_lab2": ["Q5_lab2"],
+      "Q7_lab2": ["Q6_lab2"],
+      "Q8_lab2": ["Q7_lab2"],
+      "Q9_lab2": ["Q8_lab2"],
+      "Q10_lab2": ["Q9_lab2"],
+      "Q11_lab2": ["Q10_lab2"],
+      "Q12_lab2": ["Q11_lab2"],
+      "Q13_lab2": ["Q12_lab2"]
+    }
+  },
+  "scoring": {
+    "total_xp": 1870,
+    "passing_score": 1400,
+    "perfect_score": 1870,
+    "time_bonus": true,
+    "hint_penalty": 15
+  }
+}

@@ -1,0 +1,567 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "metadata": {
+    "lab": "lab1",
+    "title": "Academia dos Fundamentos",
+    "version": "2.1.0",
+    "total_xp": 1500,
+    "total_challenges": 15,
+    "duration_minutes": 45,
+    "description": "Conceitos fundamentais do DynamoDB e partições"
+  },
+  "challenges": {
+    "Q1": {
+      "id": "Q1",
+      "title": "JOINs e Relacionamentos",
+      "chapter": "sql_vs_nosql",
+      "difficulty": "⭐ Iniciante",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual a principal diferença entre SQL e NoSQL em relação a relacionamentos?",
+      "options": [
+        "SQL não suporta relacionamentos, NoSQL sim",
+        "SQL usa JOINs para relacionar dados, NoSQL já armazena dados relacionados juntos",
+        "SQL é mais rápido para relacionamentos, NoSQL é mais lento",
+        "SQL e NoSQL funcionam da mesma forma com relacionamentos"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "SQL usa JOINs para relacionar dados, NoSQL já armazena dados relacionados juntos. SQL = Normalização + JOINs. NoSQL = Denormalização + Acesso Direto.\n\n---\n\n❌ **A) SQL não suporta relacionamentos, NoSQL sim:**\nIncorreto! SQL foi PROJETADO para relacionamentos - é seu ponto forte! SQL usa chaves estrangeiras e JOINs para relacionar tabelas. O que muda é a FORMA de relacionar: SQL separa e junta depois, NoSQL armazena junto desde o início.\n\n❌ **C) SQL é mais rápido para relacionamentos, NoSQL é mais lento:**\nNa verdade é o contrário em muitos casos! SQL com múltiplos JOINs pode ter performance variável (quanto mais JOINs, mais lento). NoSQL, ao armazenar dados relacionados juntos, oferece latência previsível e constante.\n\n❌ **D) SQL e NoSQL funcionam da mesma forma com relacionamentos:**\nAbsolutamente não! A diferença é fundamental: SQL normaliza dados em tabelas separadas e usa JOINs em tempo de leitura. NoSQL denormaliza, armazenando dados relacionados no mesmo item, eliminando JOINs.",
+      "hints": ["Pense em como você acessa dados relacionados em cada modelo"],
+      "translations": {
+        "en": {
+          "title": "JOINs and Relationships",
+          "question": "What is the main difference between SQL and NoSQL regarding relationships?",
+          "options": [
+            "SQL does not support relationships, while NoSQL does",
+            "SQL uses JOINs to relate data, while NoSQL stores related data together",
+            "SQL is faster for relationships, while NoSQL is slower",
+            "SQL and NoSQL handle relationships the same way"
+          ],
+          "explanation": "SQL uses JOINs to relate data, while NoSQL stores related data together. SQL = normalization + JOINs. NoSQL = denormalization + direct access.",
+          "hints": ["Think about how related data is accessed in each model"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["sql", "nosql", "joins"]
+    },
+    "Q2": {
+      "id": "Q2",
+      "title": "Schema Flexível",
+      "chapter": "sql_vs_nosql",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual a principal vantagem do schema flexível do NoSQL em relação à evolução de dados?",
+      "options": [
+        "Permite adicionar novos campos sem alterar a estrutura da tabela, facilitando evolução gradual",
+        "Garante que todos os items tenham exatamente os mesmos campos, evitando inconsistências",
+        "É mais rápido que schema rígido porque não precisa validar estrutura",
+        "Não tem vantagens, é apenas uma diferença de implementação"
+      ],
+      "correct_answer": "A",
+      "correct_index": 0,
+      "explanation": "Schema flexível permite adicionar novos campos sem ALTER TABLE. SQL = Schema primeiro, dados depois. NoSQL = Dados primeiro, schema evolui.\n\n---\n\n❌ **B) Garante que todos os items tenham exatamente os mesmos campos:**\nIsso é característica de SQL (schema rígido), não de NoSQL! No DynamoDB, cada item pode ter campos diferentes - um funcionário pode ter 'bonus' enquanto outro não. Essa flexibilidade é uma VANTAGEM, não desvantagem.\n\n❌ **C) É mais rápido porque não precisa validar estrutura:**\nA performance do NoSQL não vem da falta de validação de schema. Vem do acesso direto por chave (O(1)) e da ausência de JOINs. O schema flexível é sobre evolução de dados, não performance.\n\n❌ **D) Não tem vantagens:**\nHá vantagens claras! Em SQL, adicionar um campo requer ALTER TABLE (migração, downtime potencial). No DynamoDB, basta inserir items com o novo campo - os antigos continuam funcionando sem o campo. Isso é crucial para deploys contínuos.",
+      "hints": ["Pense em como adicionar novos campos ao longo do tempo"],
+      "translations": {
+        "en": {
+          "title": "Flexible Schema",
+          "question": "What is the main advantage of NoSQL's flexible schema for data evolution?",
+          "options": [
+            "It allows new fields to be added without changing the table structure, enabling gradual evolution",
+            "It guarantees that all items have exactly the same fields, avoiding inconsistencies",
+            "It is faster than a rigid schema because it does not validate structure",
+            "It has no advantages; it is only an implementation difference"
+          ],
+          "explanation": "A flexible schema allows new fields without ALTER TABLE. SQL = schema first, data later. NoSQL = data first, schema evolves.",
+          "hints": ["Think about adding new fields over time"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["schema", "flexibilidade"]
+    },
+    "Q3": {
+      "id": "Q3",
+      "title": "Performance e Escalabilidade",
+      "chapter": "sql_vs_nosql",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Por que NoSQL (DynamoDB) tem performance mais previsível que SQL com múltiplos JOINs?",
+      "options": [
+        "SQL é sempre mais lento que NoSQL, independente da query",
+        "NoSQL evita JOINs, acessando dados diretamente por chave, resultando em latência consistente",
+        "NoSQL usa menos memória, por isso é mais rápido",
+        "SQL não pode ser otimizado com índices adequados"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "NoSQL evita JOINs, acessando dados diretamente por chave. SQL = Performance variável (depende de JOINs). NoSQL = Performance previsível (acesso direto).\n\n---\n\n❌ **A) SQL é sempre mais lento que NoSQL:**\nFalso! Para queries simples ou bem indexadas, SQL pode ser igualmente rápido. A diferença aparece com múltiplos JOINs e grande volume. Não é 'sempre mais lento', é 'performance variável vs previsível'.\n\n❌ **C) NoSQL usa menos memória:**\nIsso não é verdade e não é o motivo da performance. Na verdade, NoSQL frequentemente usa MAIS armazenamento (denormalização = dados duplicados). A vantagem está no acesso O(1) por chave, não em consumo de memória.\n\n❌ **D) SQL não pode ser otimizado com índices:**\nSQL pode sim ser otimizado com índices! O problema é que JOINs complexos têm performance que varia com volume de dados e número de tabelas envolvidas. Mesmo bem indexado, 5 JOINs aninhados terão latência menos previsível que um GetItem.",
+      "hints": ["Pense no que acontece quando você faz um JOIN versus acesso direto por chave"],
+      "translations": {
+        "en": {
+          "title": "Performance and Scalability",
+          "question": "Why does NoSQL (DynamoDB) have more predictable performance than SQL with multiple JOINs?",
+          "options": [
+            "SQL is always slower than NoSQL, regardless of the query",
+            "NoSQL avoids JOINs and accesses data directly by key, producing consistent latency",
+            "NoSQL uses less memory, so it is faster",
+            "SQL cannot be optimized with proper indexes"
+          ],
+          "explanation": "NoSQL avoids JOINs and accesses data directly by key. SQL = variable performance because it depends on JOINs. NoSQL = predictable performance through direct access.",
+          "hints": ["Compare what happens during a JOIN versus direct key access"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["performance", "joins"]
+    },
+    "Q4": {
+      "id": "Q4",
+      "title": "O que é DynamoDB?",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐ Iniciante",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual característica NÃO é do DynamoDB?",
+      "options": [
+        "Serviço gerenciado (você não gerencia servidor)",
+        "Performance previsível (single-digit milliseconds)",
+        "Escala automaticamente conforme necessidade",
+        "Requer configuração manual de servidores e clusters"
+      ],
+      "correct_answer": "D",
+      "correct_index": 3,
+      "explanation": "DynamoDB é totalmente gerenciado, sem servidores, sem clusters, serverless. Você não gerencia nada, apenas usa!\n\n---\n\n❌ **A) Serviço gerenciado:**\nIsso É uma característica do DynamoDB! A AWS gerencia toda a infraestrutura: servidores, patches, backups, replicação. Você não precisa se preocupar com nada disso.\n\n❌ **B) Performance previsível (single-digit milliseconds):**\nIsso É uma característica do DynamoDB! Latência consistente de milissegundos de um dígito, independente do volume de dados. É uma das principais vantagens do serviço.\n\n❌ **C) Escala automaticamente:**\nIsso É uma característica do DynamoDB! Com o modo On-Demand ou Auto Scaling, o DynamoDB ajusta capacidade automaticamente baseado na demanda, sem intervenção manual.",
+      "hints": ["DynamoDB é 'serverless' e gerenciado"],
+      "translations": {
+        "en": {
+          "title": "What is DynamoDB?",
+          "question": "Which characteristic is NOT true of DynamoDB?",
+          "options": [
+            "Managed service; you do not manage servers",
+            "Predictable performance with single-digit millisecond latency",
+            "Automatically scales according to demand",
+            "Requires manual server and cluster configuration"
+          ],
+          "explanation": "DynamoDB is fully managed, serverless, and does not require you to manage servers or clusters.",
+          "hints": ["DynamoDB is serverless and managed"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["dynamodb", "serverless"]
+    },
+    "Q5": {
+      "id": "Q5",
+      "title": "Partition Key e Partições",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "O que acontece com items que têm o mesmo Partition Key?",
+      "options": [
+        "São distribuídos em partições físicas diferentes para balancear carga, mas podem ser consultados juntos",
+        "Formam uma partição lógica única e são armazenados juntos na mesma partição física, permitindo queries eficientes",
+        "Não podem ter o mesmo PK, causando erro de duplicação",
+        "São automaticamente deletados para evitar conflitos de chave"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "PK define partição lógica (todos os items com mesmo PK). DynamoDB usa hash da PK para determinar partição física. Items com mesmo PK → mesma partição física. Permite Query eficiente (todos os items juntos em uma operação). Base para relacionamentos 1-to-Many.\n\n---\n\n❌ **A) São distribuídos em partições físicas diferentes:**\nSe fossem distribuídos em partições físicas diferentes, não seria possível fazer Query eficiente por PK. Items com mesmo PK DEVEM estar na mesma partição física para permitir Query.\n\n❌ **C) Não podem ter o mesmo PK, causando erro:**\nCom PK+SK, múltiplos items podem ter o mesmo PK (SK diferencia). Cada combinação PK+SK precisa ser única, mas o mesmo PK pode aparecer múltiplas vezes.\n\n❌ **D) São automaticamente deletados:**\nNão há conflito; SK diferencia items com mesmo PK. O DynamoDB não deleta dados automaticamente. Items com mesmo PK são mantidos e agrupados.",
+      "hints": ["PK define partição lógica; items com mesmo PK ficam juntos"],
+      "translations": {
+        "en": {
+          "title": "Partition Key and Partitions",
+          "question": "What happens to items that have the same Partition Key?",
+          "options": [
+            "They are distributed across different physical partitions to balance load, but can still be queried together",
+            "They form one logical partition and are stored together in the same physical partition, enabling efficient queries",
+            "They cannot share the same PK and cause a duplicate key error",
+            "They are automatically deleted to avoid key conflicts"
+          ],
+          "explanation": "The PK defines a logical partition. DynamoDB hashes the PK to choose the physical partition. Items with the same PK stay together, enabling efficient Query operations.",
+          "hints": ["PK defines the logical partition; items with the same PK stay together"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["partition-key", "partitions", "logical-partition"]
+    },
+    "Q6": {
+      "id": "Q6",
+      "title": "Partições Lógicas vs Físicas",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual a diferença principal entre partição lógica e partição física no DynamoDB?",
+      "options": [
+        "Partição lógica é visível ao desenvolvedor e define como os dados são organizados; partição física é interna e pode conter múltiplas partições lógicas",
+        "Partição lógica e física são a mesma coisa, apenas nomes diferentes",
+        "Partição física é o que o desenvolvedor define com PK; partição lógica é interna",
+        "Não existe diferença, DynamoDB não usa partições"
+      ],
+      "correct_answer": "A",
+      "correct_index": 0,
+      "explanation": "Partição Lógica (PK): Definida pela Partition Key, visível ao desenvolvedor, agrupa items relacionados, você consulta por partição lógica (PK). Partição Física: Unidade de armazenamento interno do DynamoDB, gerenciada automaticamente, pode conter múltiplas partições lógicas, distribuída através de hash da PK, transparente para o desenvolvedor.\n\n---\n\n❌ **B) São a mesma coisa:**\nSão conceitos diferentes: lógica (PK) vs física (infraestrutura). Você trabalha com partições lógicas, o DynamoDB gerencia partições físicas.\n\n❌ **C) Invertido:**\nPK define partição lógica, não física. A partição física é determinada pelo hash da PK, gerenciada internamente pelo DynamoDB.\n\n❌ **D) Não usa partições:**\nDynamoDB definitivamente usa partições para escalabilidade. Partições são fundamentais para distribuição de dados e performance.",
+      "hints": ["Você trabalha com partições lógicas (PK), o DynamoDB gerencia partições físicas internamente"],
+      "translations": {
+        "en": {
+          "title": "Logical vs Physical Partitions",
+          "question": "What is the main difference between logical and physical partitions in DynamoDB?",
+          "options": [
+            "A logical partition is visible to the developer and defines data organization; a physical partition is internal and may contain multiple logical partitions",
+            "Logical and physical partitions are the same thing with different names",
+            "A physical partition is what the developer defines with PK; a logical partition is internal",
+            "There is no difference because DynamoDB does not use partitions"
+          ],
+          "explanation": "Logical partition = defined by the Partition Key and used by developers. Physical partition = internal storage unit managed by DynamoDB.",
+          "hints": ["You work with logical partitions; DynamoDB manages physical partitions internally"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["partitions", "logical", "physical"]
+    },
+    "Q7": {
+      "id": "Q7",
+      "title": "Distribuição por Hash",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Como o DynamoDB decide em qual partição física armazenar uma partição lógica (PK)?",
+      "options": [
+        "Usa round-robin, distribuindo sequencialmente entre as partições físicas disponíveis",
+        "Calcula um hash da Partition Key e usa esse valor para determinar a partição física, garantindo que a mesma PK sempre vá para a mesma partição física",
+        "Armazena todas as PKs na primeira partição física até ela ficar cheia, depois usa a próxima",
+        "Permite que o desenvolvedor escolha manualmente qual partição física usar"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Função Hash: DynamoDB aplica hash function na PK, resultado do hash determina partição física, distribuição uniforme (hash bem distribuído), determinística (mesma PK → mesmo hash → mesma partição física), permite acesso direto à partição física conhecida.\n\n---\n\n❌ **A) Round-robin:**\nRound-robin não garante que mesma PK vá para mesma partição (quebraria Query). Se a mesma PK fosse para partições diferentes em cada inserção, não seria possível fazer Query eficiente.\n\n❌ **C) Primeira partição até ficar cheia:**\nArmazenar tudo em uma partição causaria hot partition e não escalaria. O DynamoDB distribui uniformemente usando hash para balancear carga.\n\n❌ **D) Desenvolvedor escolhe:**\nDynamoDB gerencia partições físicas automaticamente, desenvolvedor não escolhe. A distribuição é transparente e baseada em hash da PK.",
+      "hints": ["Hash garante distribuição uniforme e determinística"],
+      "translations": {
+        "en": {
+          "title": "Hash Distribution",
+          "question": "How does DynamoDB decide which physical partition stores a logical partition (PK)?",
+          "options": [
+            "It uses round-robin distribution across available physical partitions",
+            "It calculates a hash of the Partition Key and uses that value to choose the physical partition, so the same PK always goes to the same physical partition",
+            "It stores all PKs in the first physical partition until it is full, then uses the next one",
+            "It allows the developer to manually choose the physical partition"
+          ],
+          "explanation": "DynamoDB applies a hash function to the PK. The hash result determines the physical partition, giving deterministic and well-distributed access.",
+          "hints": ["Hashing provides uniform and deterministic distribution"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["hash", "distribution", "partitions"]
+    },
+    "Q8": {
+      "id": "Q8",
+      "title": "Hot Partitions",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "O que caracteriza uma hot partition e qual a principal causa?",
+      "options": [
+        "Partição com muitos items, causada por escolher PK com baixa cardinalidade",
+        "Partição que recebe desproporcionalmente mais requisições que outras, geralmente causada por escolher PK que concentra muito tráfego",
+        "Partição física que está cheia, causada por items muito grandes",
+        "Partição que não recebe requisições, causada por escolher PK incorreta"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Hot Partition: Uma partição lógica (PK) recebe muito mais requisições que outras, causa gargalo de performance, limita throughput da tabela, pode causar throttling. Causas Comuns: PK com baixa cardinalidade (poucos valores únicos), PK que concentra tráfego (ex: data/hora, status fixo), distribuição desigual de acesso.\n\n---\n\n❌ **A) Muitos items:**\nMuitos items não causa hot partition; muitas requisições sim. O problema é tráfego concentrado, não quantidade de dados.\n\n❌ **C) Partição cheia:**\nPartição cheia é problema de tamanho, não de tráfego. Hot partition é sobre requisições, não sobre espaço.\n\n❌ **D) Sem requisições:**\nPartição sem requisições não é 'hot', é o oposto. Hot partition significa partição 'quente' com muito tráfego.",
+      "hints": ["Hot partition = partição 'quente' com muito tráfego concentrado"],
+      "translations": {
+        "en": {
+          "title": "Hot Partitions",
+          "question": "What characterizes a hot partition and what is the main cause?",
+          "options": [
+            "A partition with many items, caused by choosing a low-cardinality PK",
+            "A partition receiving disproportionately more requests than others, usually caused by a PK that concentrates too much traffic",
+            "A full physical partition, caused by very large items",
+            "A partition with no requests, caused by choosing the wrong PK"
+          ],
+          "explanation": "A hot partition is a logical partition that receives far more requests than others, creating a performance bottleneck and possible throttling.",
+          "hints": ["Hot partition means concentrated traffic on one partition"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["hot-partition", "performance", "scalability"]
+    },
+    "Q9": {
+      "id": "Q9",
+      "title": "PK vs PK+SK",
+      "chapter": "dynamodb_basics",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual a diferença principal entre tabela com apenas PK e PK+SK em relação à modelagem de relacionamentos?",
+      "options": [
+        "Não há diferença, funcionam igual para todos os casos de uso",
+        "Com PK+SK você pode modelar relacionamentos 1-to-Many, permitindo múltiplos items com o mesmo PK",
+        "Apenas PK é mais rápido para todas as operações",
+        "PK+SK não permite Query, apenas GetItem"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "PK apenas = 1 item por chave. PK+SK = múltiplos items, relacionamentos. SK diferencia items dentro do mesmo PK.\n\n---\n\n❌ **A) Não há diferença:**\nHá diferença fundamental! Com apenas PK, cada chave identifica UM item (like key-value store). Com PK+SK, você pode ter MÚLTIPLOS items com o mesmo PK, diferenciados pelo SK. É isso que permite modelar hierarquias e relacionamentos.\n\n❌ **C) Apenas PK é mais rápido:**\nNão é bem assim. GetItem em ambos é O(1). A diferença é funcional, não de performance. Com PK+SK você GANHA a capacidade de Query para buscar todos items de um PK de uma vez - isso é mais poderoso, não mais lento.\n\n❌ **D) PK+SK não permite Query:**\nO oposto! PK+SK é o que HABILITA Query. Com apenas PK, você só pode fazer GetItem (1 item). Com PK+SK, você pode fazer Query(PK) para retornar TODOS os items daquele PK, ordenados pelo SK. Query é uma das operações mais poderosas do DynamoDB!",
+      "hints": ["Pense em quantos items podem ter o mesmo PK em cada caso"],
+      "translations": {
+        "en": {
+          "title": "PK vs PK+SK",
+          "question": "What is the main difference between a table with only PK and a table with PK+SK for relationship modeling?",
+          "options": [
+            "There is no difference; they work the same for all use cases",
+            "With PK+SK you can model 1-to-Many relationships, allowing multiple items with the same PK",
+            "Only PK is faster for every operation",
+            "PK+SK does not allow Query, only GetItem"
+          ],
+          "explanation": "PK only = one item per key. PK+SK = multiple items under the same PK, differentiated by SK, enabling relationships and Query operations.",
+          "hints": ["Think about how many items can share the same PK in each model"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["pk", "sk", "modelagem"]
+    },
+    "Q10": {
+      "id": "Q10",
+      "title": "GetItem vs Query",
+      "chapter": "operacoes",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Link precisa buscar dados de um employee específico. Ele sabe o PK e SK exatos. Qual operação você deve usar e por quê?",
+      "options": [
+        "Query, porque permite buscar múltiplos items de uma vez",
+        "GetItem, porque é a operação mais rápida quando você tem PK+SK exatos",
+        "Scan, porque varre toda a tabela garantindo que encontra o item",
+        "BatchGetItem, porque é otimizado para buscar items específicos"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "GetItem = O(1) quando você tem PK+SK exatos. Mais rápido possível, retorna exatamente 1 item.\n\n---\n\n❌ **A) Query, porque permite buscar múltiplos items:**\nQuery é para quando você quer MÚLTIPLOS items com o mesmo PK. Se você tem PK+SK exatos e quer UM item, GetItem é mais direto e eficiente. Query tem overhead extra para filtrar por SK quando você já sabe exatamente qual quer.\n\n❌ **C) Scan, porque varre toda a tabela:**\nScan é a PIOR opção! Varre TODA a tabela, consome muito RCU, é lento e caro. Nunca use Scan quando você sabe a chave. Scan é para jobs batch ocasionais, não para buscar items específicos.\n\n❌ **D) BatchGetItem, porque é otimizado:**\nBatchGetItem é para buscar MÚLTIPLOS items de uma vez (até 100), cada um por sua PK+SK. Para UM único item, é overhead desnecessário. Use GetItem para 1 item, BatchGetItem para vários items conhecidos.",
+      "hints": ["É a operação mais rápida possível"],
+      "translations": {
+        "en": {
+          "title": "GetItem vs Query",
+          "question": "Link needs to fetch data for a specific employee. He knows the exact PK and SK. Which operation should you use and why?",
+          "options": [
+            "Query, because it can fetch multiple items at once",
+            "GetItem, because it is the fastest operation when you have the exact PK+SK",
+            "Scan, because it scans the whole table and guarantees the item is found",
+            "BatchGetItem, because it is optimized for specific items"
+          ],
+          "explanation": "GetItem is O(1) when you have the exact PK+SK. It is the fastest direct lookup and returns exactly one item.",
+          "hints": ["This is the fastest possible operation for one known item"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["getitem", "query", "operacoes"]
+    },
+    "Q11": {
+      "id": "Q11",
+      "title": "Por que Query por PK é rápida",
+      "chapter": "operacoes",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Por que uma Query usando apenas a Partition Key é tão rápida comparada a operações que não usam PK?",
+      "options": [
+        "DynamoDB mantém um índice especial para PKs que acelera todas as queries",
+        "O hash da PK permite acesso direto à partição física específica, evitando varrer outras partições ou a tabela inteira",
+        "Queries por PK são mais rápidas porque DynamoDB usa cache especial para partições mais acessadas",
+        "DynamoDB pré-carrega todas as partições em memória, então qualquer query é rápida"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Acesso Direto: Hash da PK determina partição física exata, DynamoDB vai direto àquela partição (O(1) lookup), não precisa varrer outras partições, não precisa varrer tabela inteira, latência consistente e previsível.\n\n---\n\n❌ **A) Índice especial:**\nNão é sobre índice especial; é sobre acesso direto por hash. A PK não é um índice separado, é a chave primária que determina diretamente a partição física.\n\n❌ **C) Cache especial:**\nCache ajuda, mas não é o fator principal; é o acesso direto. Mesmo sem cache, Query por PK é rápida porque vai direto à partição física conhecida.\n\n❌ **D) Pré-carrega tudo:**\nDynamoDB não pré-carrega todas as partições; escala dinamicamente. A performance vem do acesso direto por hash, não de pré-carregamento.",
+      "hints": ["Pense no que acontece quando você tem a PK vs quando não tem"],
+      "translations": {
+        "en": {
+          "title": "Why Query by PK is Fast",
+          "question": "Why is a Query using only the Partition Key so fast compared to operations that do not use the PK?",
+          "options": [
+            "DynamoDB keeps a special PK index that accelerates every query",
+            "The PK hash allows direct access to the specific physical partition, avoiding scans across other partitions or the whole table",
+            "PK queries are faster because DynamoDB uses a special cache for frequently accessed partitions",
+            "DynamoDB preloads all partitions into memory, so any query is fast"
+          ],
+          "explanation": "The PK hash points DynamoDB directly to the physical partition. It avoids scanning unrelated partitions and keeps latency predictable.",
+          "hints": ["Compare what happens when you have the PK versus when you do not"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["query", "performance", "partitions"]
+    },
+    "Q12": {
+      "id": "Q12",
+      "title": "Query Eficiente com Filtros",
+      "chapter": "operacoes",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Zelda precisa listar todos os planos de benefícios de um employee específico. A tabela tem estrutura PK='EMPLOYEE#uuid' e SK pode ser 'SUMMARY', 'PLAN#uuid1', 'PLAN#uuid2', 'ORDER#uuid', 'BALANCE#2024-01', etc. Ela sabe o PK do employee mas não sabe quantos planos existem nem seus SKs exatos. Qual operação você recomenda?",
+      "options": [
+        "Usar GetItem com PK+SK exatos, fazendo uma chamada para cada plano conhecido",
+        "Usar Query com PK e begins_with no SK para buscar apenas items cujo SK começa com 'PLAN#'",
+        "Usar Query apenas com PK, retornando todos os items e depois filtrar no código os que têm SK começando com 'PLAN#'",
+        "Usar Scan na tabela inteira e filtrar no código os items com PK do employee e SK começando com 'PLAN#'"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Query com begins_with na KeyConditionExpression filtra diretamente no Sort Key ANTES de retornar dados. O filtro é executado na partição física, reduzindo bandwidth (apenas items relevantes são lidos) e processamento (filtro na origem). É a forma mais eficiente quando você não sabe quantos items existem.\n\n---\n\n❌ **A) GetItem com PK+SK exatos:**\nGetItem requer que você saiba o SK exato de cada item. Como Zelda não sabe quantos planos existem nem seus SKs, ela não pode usar GetItem. Além disso, mesmo que soubesse, precisaria fazer múltiplas chamadas (uma por plano), o que é ineficiente. Query com begins_with resolve tudo em uma única chamada.\n\n❌ **C) Query sem filtro + filtrar no código:**\nVocê lê TODOS os items do PK (SUMMARY, PLAN#, ORDER#, BALANCE#, etc) e depois filtra no cliente. Isso desperdiça bandwidth e processamento. Se houver muitos items, você pode exceder 1 MB e precisar paginar, lendo ainda mais dados desnecessários. Query com begins_with filtra na origem, retornando apenas o que precisa.\n\n❌ **D) Scan na tabela inteira:**\nScan varre TODA a tabela (todas as partições de todos os employees), depois filtra no cliente. Extremamente ineficiente! Você paga pelo Scan de milhões de items quando só precisa de alguns items de uma partição específica. Scan é O(n) da tabela inteira, Query é O(n) apenas da partição do PK.",
+      "hints": ["Query permite filtrar o Sort Key diretamente usando begins_with na KeyConditionExpression"],
+      "translations": {
+        "en": {
+          "title": "Efficient Query with Filters",
+          "question": "Zelda needs to list all benefit plans for a specific employee. She knows the employee PK but not how many plans exist or their exact SKs. Which operation do you recommend?",
+          "options": [
+            "Use GetItem with exact PK+SK, one call for each known plan",
+            "Use Query with PK and begins_with on SK to fetch only items whose SK starts with 'PLAN#'",
+            "Use Query with only PK, return all items, then filter PLAN# items in code",
+            "Use Scan over the whole table and filter by employee PK and PLAN# in code"
+          ],
+          "explanation": "Query with begins_with in the KeyConditionExpression filters directly on the Sort Key before returning data, reducing bandwidth and client-side work.",
+          "hints": ["Query can filter the Sort Key using begins_with in the KeyConditionExpression"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["query", "begins_with", "operacoes"]
+    },
+    "Q13": {
+      "id": "Q13",
+      "title": "Quando usar Scan",
+      "chapter": "operacoes",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Em qual situação é aceitável usar Scan?",
+      "options": [
+        "Em queries frequentes de produção que precisam buscar por atributos não-chave",
+        "Em jobs batch que rodam ocasionalmente para análise ou backup de dados",
+        "Sempre que você não sabe a PK, mesmo em queries frequentes",
+        "Para buscar 1 item específico quando você tem PK+SK"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Scan = jobs batch ocasionais. Query/GetItem = produção frequente. Scan é caro mas aceitável para backup/ETL.\n\n---\n\n❌ **A) Em queries frequentes de produção:**\nNunca! Scan em produção frequente vai estourar seu custo e degradar performance. Se precisa buscar por atributos não-chave frequentemente, crie um GSI (Global Secondary Index) com esses atributos como chave.\n\n❌ **C) Sempre que não sabe a PK:**\nSe você frequentemente não sabe a PK, seu modelo de dados precisa ser repensado! Crie índices secundários (GSI) para os padrões de acesso que não usam a PK principal. Scan frequente = problema de modelagem.\n\n❌ **D) Para buscar 1 item com PK+SK:**\nAbsolutamente não! Se tem PK+SK, use GetItem - O(1), direto ao ponto. Scan varre a tabela INTEIRA para achar 1 item. É como procurar uma agulha varrendo todo o palheiro quando você tem um mapa do tesouro.",
+      "hints": ["Scan é caro, mas tem seu lugar em cenários específicos"],
+      "translations": {
+        "en": {
+          "title": "When to Use Scan",
+          "question": "In which situation is it acceptable to use Scan?",
+          "options": [
+            "In frequent production queries that need to search by non-key attributes",
+            "In occasional batch jobs for analysis or data backup",
+            "Whenever you do not know the PK, even in frequent queries",
+            "To fetch one specific item when you have PK+SK"
+          ],
+          "explanation": "Scan is acceptable for occasional batch jobs such as backup or ETL. Frequent production paths should use Query, GetItem, or a proper GSI.",
+          "hints": ["Scan is expensive, but it has a place in specific batch scenarios"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["scan", "batch", "operacoes"]
+    },
+    "Q14": {
+      "id": "Q14",
+      "title": "Limite de Query",
+      "chapter": "limites",
+      "difficulty": "⭐ Iniciante",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual o limite máximo de dados que uma Query pode retornar em uma única operação e o que acontece se exceder?",
+      "options": [
+        "400 KB, retorna erro se exceder",
+        "1 MB, usa LastEvaluatedKey para paginação automática",
+        "10 MB, sem necessidade de paginação",
+        "Ilimitado, DynamoDB escala automaticamente"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Query = 1 MB por operação. Paginação = LastEvaluatedKey. Continue até LastEvaluatedKey ser null.\n\n---\n\n❌ **A) 400 KB, retorna erro:**\n400 KB é o limite de UM ITEM, não de uma Query! Query pode retornar 1 MB de dados (múltiplos items). E não retorna erro - usa paginação via LastEvaluatedKey para você continuar buscando.\n\n❌ **C) 10 MB, sem paginação:**\nMuito acima do limite real! 1 MB por operação é o limite. Se sua Query retorna mais, DynamoDB para em 1 MB e retorna LastEvaluatedKey. Você faz outra Query com ExclusiveStartKey = LastEvaluatedKey até acabar.\n\n❌ **D) Ilimitado, escala automaticamente:**\nO auto-scaling é para THROUGHPUT (capacidade de leitura/escrita), não para tamanho de resposta. O limite de 1 MB por operação é fixo para garantir latência previsível. Dados grandes vêm em páginas.",
+      "hints": ["É o mesmo limite do Scan"],
+      "translations": {
+        "en": {
+          "title": "Query Limit",
+          "question": "What is the maximum amount of data a Query can return in one operation, and what happens if it exceeds it?",
+          "options": [
+            "400 KB, and it returns an error if exceeded",
+            "1 MB, using LastEvaluatedKey for pagination",
+            "10 MB, with no need for pagination",
+            "Unlimited, because DynamoDB scales automatically"
+          ],
+          "explanation": "A Query returns up to 1 MB per operation. If more data exists, DynamoDB returns LastEvaluatedKey so the client can continue pagination.",
+          "hints": ["It is the same data limit used by Scan"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["query", "limites", "paginacao"]
+    },
+    "Q15": {
+      "id": "Q15",
+      "title": "Limite de BatchWriteItem",
+      "chapter": "limites",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Quais são os limites de BatchWriteItem e como lidar com mais items?",
+      "options": [
+        "10 items por operação, fazer múltiplas chamadas se necessário",
+        "25 items por operação (máximo 16 MB total), fazer múltiplas chamadas se necessário",
+        "100 items por operação, sem necessidade de múltiplas chamadas",
+        "Ilimitado, DynamoDB processa tudo automaticamente"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "BatchWriteItem = 25 items, 16 MB. BatchGetItem = 100 items, 16 MB. Divida em lotes se necessário.\n\n---\n\n❌ **A) 10 items por operação:**\nO limite é 25 items, não 10. Cada item pode ter até 400 KB, e o total da operação não pode exceder 16 MB. Confundir esses limites pode causar erros de dimensionamento.\n\n❌ **C) 100 items por operação:**\n100 items é o limite de BatchGetItem (leitura), não BatchWriteItem (escrita)! Escrita em lote tem limite menor (25) porque é mais custosa. Lembre: GetItem = 100, WriteItem = 25.\n\n❌ **D) Ilimitado, processa automaticamente:**\nNão é ilimitado! DynamoDB não divide automaticamente operações grandes. Se você passar mais de 25 items ou 16 MB, a API retorna erro. VOCÊ precisa dividir em lotes no seu código. A SDK não faz isso por você.",
+      "hints": ["É menor que BatchGetItem"],
+      "translations": {
+        "en": {
+          "title": "BatchWriteItem Limit",
+          "question": "What are the BatchWriteItem limits and how should you handle more items?",
+          "options": [
+            "10 items per operation; make multiple calls if needed",
+            "25 items per operation with a 16 MB total limit; make multiple calls if needed",
+            "100 items per operation, with no need for multiple calls",
+            "Unlimited; DynamoDB processes everything automatically"
+          ],
+          "explanation": "BatchWriteItem supports up to 25 items and 16 MB per call. Split larger writes into batches.",
+          "hints": ["It is smaller than the BatchGetItem limit"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["batch", "limites", "operacoes"]
+    }
+  },
+  "progression": {
+    "order": ["Q1", "Q2", "Q3", "Q4", "Q5", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11", "Q12", "Q13", "Q14", "Q15"],
+    "prerequisites": {
+      "Q1": [],
+      "Q2": ["Q1"],
+      "Q3": ["Q2"],
+      "Q4": ["Q3"],
+      "Q5": ["Q4"],
+      "Q6": ["Q5"],
+      "Q7": ["Q6"],
+      "Q8": ["Q7"],
+      "Q9": ["Q8"],
+      "Q10": ["Q9"],
+      "Q11": ["Q10"],
+      "Q12": ["Q11"],
+      "Q13": ["Q12"],
+      "Q14": ["Q13"],
+      "Q15": ["Q14"]
+    }
+  },
+  "scoring": {
+    "total_xp": 1500,
+    "passing_score": 1050,
+    "perfect_score": 1500,
+    "time_bonus": true,
+    "hint_penalty": 10
+  }
+}
+

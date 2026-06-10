@@ -1,0 +1,32 @@
+{
+  "lab1-chave-simples": [
+    {"PutRequest": {"Item": {"PK": {"S": "USER#550e8400-e29b-41d4-a716-446655440000"}, "name": {"S": "Zelda"}, "email": {"S": "zelda@email.com"}, "cpf": {"S": "12345678901"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-15T10:30:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#660e8400-e29b-41d4-a716-446655440001"}, "name": {"S": "Link"}, "email": {"S": "link@techcorp.com"}, "cpf": {"S": "98765432100"}, "status": {"S": "active"}, "created_at": {"S": "2022-06-10T09:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-001"}, "name": {"S": "User 1"}, "email": {"S": "user1@email.com"}, "cpf": {"S": "00000000001"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-01T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-002"}, "name": {"S": "User 2"}, "email": {"S": "user2@email.com"}, "cpf": {"S": "00000000002"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-02T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-003"}, "name": {"S": "User 3"}, "email": {"S": "user3@email.com"}, "cpf": {"S": "00000000003"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-03T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-004"}, "name": {"S": "User 4"}, "email": {"S": "user4@email.com"}, "cpf": {"S": "00000000004"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-04T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-005"}, "name": {"S": "User 5"}, "email": {"S": "user5@email.com"}, "cpf": {"S": "00000000005"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-05T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-006"}, "name": {"S": "User 6"}, "email": {"S": "user6@email.com"}, "cpf": {"S": "00000000006"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-06T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-007"}, "name": {"S": "User 7"}, "email": {"S": "user7@email.com"}, "cpf": {"S": "00000000007"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-07T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-008"}, "name": {"S": "User 8"}, "email": {"S": "user8@email.com"}, "cpf": {"S": "00000000008"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-08T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-009"}, "name": {"S": "User 9"}, "email": {"S": "user9@email.com"}, "cpf": {"S": "00000000009"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-09T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-010"}, "name": {"S": "User 10"}, "email": {"S": "user10@email.com"}, "cpf": {"S": "00000000010"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-10T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-011"}, "name": {"S": "User 11"}, "email": {"S": "user11@email.com"}, "cpf": {"S": "00000000011"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-11T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-012"}, "name": {"S": "User 12"}, "email": {"S": "user12@email.com"}, "cpf": {"S": "00000000012"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-12T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-013"}, "name": {"S": "User 13"}, "email": {"S": "user13@email.com"}, "cpf": {"S": "00000000013"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-13T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-014"}, "name": {"S": "User 14"}, "email": {"S": "user14@email.com"}, "cpf": {"S": "00000000014"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-14T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-015"}, "name": {"S": "User 15"}, "email": {"S": "user15@email.com"}, "cpf": {"S": "00000000015"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-15T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-016"}, "name": {"S": "User 16"}, "email": {"S": "user16@email.com"}, "cpf": {"S": "00000000016"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-16T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-017"}, "name": {"S": "User 17"}, "email": {"S": "user17@email.com"}, "cpf": {"S": "00000000017"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-17T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-018"}, "name": {"S": "User 18"}, "email": {"S": "user18@email.com"}, "cpf": {"S": "00000000018"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-18T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-019"}, "name": {"S": "User 19"}, "email": {"S": "user19@email.com"}, "cpf": {"S": "00000000019"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-19T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-020"}, "name": {"S": "User 20"}, "email": {"S": "user20@email.com"}, "cpf": {"S": "00000000020"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-20T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-021"}, "name": {"S": "User 21"}, "email": {"S": "user21@email.com"}, "cpf": {"S": "00000000021"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-21T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-022"}, "name": {"S": "User 22"}, "email": {"S": "user22@email.com"}, "cpf": {"S": "00000000022"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-22T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-023"}, "name": {"S": "User 23"}, "email": {"S": "user23@email.com"}, "cpf": {"S": "00000000023"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-23T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-024"}, "name": {"S": "User 24"}, "email": {"S": "user24@email.com"}, "cpf": {"S": "00000000024"}, "status": {"S": "inactive"}, "created_at": {"S": "2024-01-24T10:00:00Z"}}}},
+    {"PutRequest": {"Item": {"PK": {"S": "USER#user-025"}, "name": {"S": "User 25"}, "email": {"S": "user25@email.com"}, "cpf": {"S": "00000000025"}, "status": {"S": "active"}, "created_at": {"S": "2024-01-25T10:00:00Z"}}}}
+  ]
+}
+

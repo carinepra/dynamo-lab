@@ -1,0 +1,1187 @@
+/*
+ * ========================================
+ * AURORA ACADEMY: QUEST DYNAMODB
+ * Componentes para Treinamentos Gamificados
+ * ========================================
+ * 
+ * Versão: 1.0
+ * Data: Novembro 2025
+ * Abordagem: 80% Aurora Labs + 20% Fantasy
+ * 
+ * Base: Identidade Visual Aurora Labs
+ * Extensão: Elementos gamificados sutis
+ */
+
+/* ========================================
+   VARIÁVEIS CSS
+   ======================================== */
+
+:root {
+  /* Cores Base Aurora Labs (mantidas) */
+  --brand-navy-0: #e6f7ff;
+  --brand-navy-40: #002740;
+  --brand-aqua-0: #e6f9ff;
+  --brand-aqua-20: #67d2df;
+  --brand-yellow-10: #f9e27d;
+  --brand-red-20: #f94f48;
+  --brand-green-20: #789d4a;
+  --brand-blue-20: #3c70c1;
+  --brand-purple-20: #a259ff;
+  --brand-neutral-0: #ffffff;
+  --brand-neutral-10: #e1e9ec;
+  --brand-neutral-20: #abbdc8;
+  --brand-neutral-30: #546c7e;
+  --brand-neutral-40: #253746;
+  
+  /* Cores Quest (complementares) */
+  --quest-magic: #a259ff;
+  --quest-success: #789d4a;
+  --quest-warning: #f9e27d;
+  --quest-danger: #f94f48;
+  --quest-crystal: #67d2df;
+  --quest-dark: #002740;
+  --quest-medium: #546c7e;
+  --quest-light: #e1e9ec;
+  
+  /* Sistema de XP */
+  --xp-bar-fill: var(--quest-magic);
+  --xp-bar-bg: var(--quest-light);
+  --level-badge: var(--quest-success);
+  
+  /* Estados de Missão */
+  --mission-pending: var(--quest-medium);
+  --mission-in-progress: var(--brand-aqua-20);
+  --mission-completed: var(--quest-success);
+  --mission-failed: var(--quest-danger);
+  
+  /* Badges */
+  --badge-bronze: #c0a445;
+  --badge-silver: #abbdc8;
+  --badge-gold: #f9e27d;
+  --badge-legend: #a259ff;
+  
+  /* Espaçamentos (8px base) */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(0, 39, 64, 0.1);
+  --shadow-md: 0 4px 6px rgba(0, 39, 64, 0.1);
+  --shadow-lg: 0 10px 20px rgba(0, 39, 64, 0.15);
+  
+  /* Bordas */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  
+  /* Transições */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms cubic-bezier(.72,.04,.16,.97);
+  --transition-slow: 400ms cubic-bezier(.72,.04,.16,.97);
+}
+
+/* ========================================
+   TIPOGRAFIA QUEST
+   ======================================== */
+
+@font-face {
+  font-family: 'Rubik';
+  font-display: swap;
+  font-weight: 400;
+  src: url('assets/fonts/rubik-v18-latin-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-display: swap;
+  font-weight: 500;
+  src: url('assets/fonts/rubik-v18-latin-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-display: swap;
+  font-weight: 700;
+  src: url('assets/fonts/rubik-v18-latin-700.woff2') format('woff2');
+}
+
+/* Hierarquia Épica */
+.quest-title-epic {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 32px;
+  line-height: 1.2;
+  color: var(--quest-dark);
+  letter-spacing: -0.5px;
+  margin: 0 0 var(--space-3) 0;
+}
+
+.quest-title-chapter {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 1.3;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-title-mission {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 1.4;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-body {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-dialogue {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--quest-dark);
+  font-style: italic;
+  padding-left: var(--space-2);
+  border-left: 3px solid var(--quest-crystal);
+  margin: var(--space-3) 0;
+}
+
+.quest-label {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--quest-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quest-code {
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--quest-dark);
+  background: var(--quest-light);
+  padding: 2px 6px;
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   SISTEMA DE NÍVEIS E XP
+   ======================================== */
+
+/* Badge de Nível */
+.quest-level-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--brand-neutral-0);
+  border: 2px solid;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast);
+}
+
+.quest-level-badge:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.quest-level-emoji {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.quest-level-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--quest-dark);
+}
+
+.quest-level-xp {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--quest-medium);
+  margin-left: var(--space-1);
+}
+
+/* Variações de Nível */
+.quest-level-bronze {
+  border-color: var(--badge-bronze);
+}
+
+.quest-level-silver {
+  border-color: var(--badge-silver);
+}
+
+.quest-level-gold {
+  border-color: var(--badge-gold);
+}
+
+.quest-level-principal {
+  border-color: var(--quest-crystal);
+}
+
+.quest-level-legend {
+  border-color: var(--badge-legend);
+  background: linear-gradient(135deg, #a259ff 0%, #67d2df 100%);
+}
+
+.quest-level-legend .quest-level-name,
+.quest-level-legend .quest-level-xp {
+  color: var(--brand-neutral-0);
+}
+
+/* Barra de Progresso XP */
+.quest-xp-bar {
+  width: 100%;
+  margin: var(--space-3) 0;
+}
+
+.quest-xp-bar-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  margin-bottom: var(--space-1);
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+}
+
+.quest-xp-current {
+  font-weight: 700;
+  color: var(--quest-magic);
+}
+
+.quest-xp-target {
+  font-weight: 400;
+  color: var(--quest-medium);
+}
+
+.quest-xp-next {
+  margin-left: auto;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--quest-success);
+}
+
+.quest-xp-bar-track {
+  width: 100%;
+  height: 12px;
+  background: var(--xp-bar-bg);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.quest-xp-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--quest-magic) 0%, var(--quest-crystal) 100%);
+  border-radius: 6px;
+  transition: width var(--transition-slow);
+  box-shadow: 0 0 10px rgba(162, 89, 255, 0.3);
+}
+
+/* ========================================
+   BADGES E CONQUISTAS
+   ======================================== */
+
+.quest-achievement {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--brand-neutral-0);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.quest-achievement:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--quest-crystal);
+}
+
+.quest-achievement-icon {
+  font-size: 40px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-achievement-content {
+  flex: 1;
+}
+
+.quest-achievement-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-achievement-desc {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-achievement-xp {
+  display: inline-block;
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  color: var(--quest-magic);
+  padding: 2px 8px;
+  background: rgba(162, 89, 255, 0.1);
+  border-radius: var(--radius-sm);
+}
+
+/* ========================================
+   PERSONAGENS
+   ======================================== */
+
+.quest-character-card {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--brand-neutral-0);
+  border: 3px solid;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: transform var(--transition-fast);
+}
+
+.quest-character-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.quest-character-avatar {
+  font-size: 64px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-character-info {
+  flex: 1;
+}
+
+.quest-character-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-character-role {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-character-stats {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.quest-character-stats li {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--quest-dark);
+}
+
+/* Variações de Personagem */
+.quest-character-zelda {
+  border-color: var(--quest-crystal);
+}
+
+.quest-character-link {
+  border-color: var(--quest-success);
+}
+
+.quest-character-wizard {
+  border-color: var(--quest-magic);
+}
+
+/* ========================================
+   LOCAIS
+   ======================================== */
+
+.quest-location-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--brand-navy-40) 0%, var(--brand-neutral-40) 100%);
+  color: var(--brand-neutral-0);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-4);
+  box-shadow: var(--shadow-lg);
+}
+
+.quest-location-icon {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-location-info {
+  flex: 1;
+}
+
+.quest-location-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--brand-neutral-0);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-location-desc {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+}
+
+.quest-location-chapter {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--brand-neutral-0);
+  padding: var(--space-1) var(--space-2);
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-md);
+  white-space: nowrap;
+}
+
+/* Variações de Local */
+.quest-location-academia {
+  background: linear-gradient(135deg, #3c70c1 0%, #2354b4 100%);
+}
+
+.quest-location-templo {
+  background: linear-gradient(135deg, #67d2df 0%, #4fb9c6 100%);
+}
+
+.quest-location-castelo {
+  background: linear-gradient(135deg, #002740 0%, #124666 100%);
+}
+
+.quest-location-torre {
+  background: linear-gradient(135deg, #a259ff 0%, #823cd6 100%);
+}
+
+.quest-location-caverna {
+  background: linear-gradient(135deg, #f94f48 0%, #d13630 100%);
+}
+
+.quest-location-oraculo {
+  background: linear-gradient(135deg, #789d4a 0%, #558833 100%);
+}
+
+/* ========================================
+   MISSÕES
+   ======================================== */
+
+.quest-mission-card {
+  background: var(--brand-neutral-0);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+  margin-bottom: var(--space-3);
+}
+
+.quest-mission-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.quest-mission-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--quest-light);
+  border-bottom: 1px solid var(--quest-light);
+}
+
+.quest-mission-number {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--quest-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.quest-mission-difficulty {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--quest-medium);
+}
+
+.quest-mission-content {
+  padding: var(--space-3);
+}
+
+.quest-mission-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-mission-desc {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.quest-mission-objectives {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.quest-mission-objectives li {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  padding-left: var(--space-3);
+}
+
+.quest-objective-done {
+  color: var(--quest-success);
+}
+
+.quest-objective-pending {
+  color: var(--quest-medium);
+}
+
+.quest-mission-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-2) var(--space-3);
+  background: var(--quest-light);
+  border-top: 1px solid var(--quest-light);
+}
+
+.quest-mission-xp {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--quest-magic);
+}
+
+.quest-mission-btn {
+  padding: var(--space-1) var(--space-3);
+  background: var(--quest-dark);
+  color: var(--brand-neutral-0);
+  border: none;
+  border-radius: var(--radius-md);
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.quest-mission-btn:hover {
+  background: var(--brand-aqua-20);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Estados de Missão */
+.quest-mission-pending {
+  border-left: 4px solid var(--mission-pending);
+}
+
+.quest-mission-in-progress {
+  border-left: 4px solid var(--mission-in-progress);
+}
+
+.quest-mission-completed {
+  border-left: 4px solid var(--mission-completed);
+  opacity: 0.7;
+}
+
+.quest-mission-failed {
+  border-left: 4px solid var(--mission-failed);
+}
+
+/* ========================================
+   DIÁLOGOS
+   ======================================== */
+
+.quest-dialogue-box {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--brand-neutral-0);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  margin: var(--space-4) 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-dialogue-avatar {
+  font-size: 48px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-dialogue-content {
+  flex: 1;
+}
+
+.quest-dialogue-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--quest-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-dialogue-text {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--quest-dark);
+  font-style: italic;
+  margin: 0;
+}
+
+/* Variações de Diálogo */
+.quest-dialogue-wizard {
+  border-left: 4px solid var(--quest-magic);
+}
+
+.quest-dialogue-zelda {
+  border-left: 4px solid var(--quest-crystal);
+}
+
+.quest-dialogue-link {
+  border-left: 4px solid var(--quest-success);
+}
+
+/* ========================================
+   CONCEITOS E ALERTAS
+   ======================================== */
+
+.quest-concept-box {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--brand-neutral-0);
+  border: 2px solid;
+  border-radius: var(--radius-lg);
+  margin: var(--space-4) 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-concept-icon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-concept-content {
+  flex: 1;
+}
+
+.quest-concept-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-concept-desc {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-concept-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.quest-concept-stats span {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--quest-dark);
+  padding: 4px 8px;
+  background: var(--quest-light);
+  border-radius: var(--radius-sm);
+}
+
+.quest-concept-example {
+  margin-top: var(--space-2);
+  padding: var(--space-2);
+  background: var(--quest-light);
+  border-radius: var(--radius-md);
+}
+
+.quest-concept-example code {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  color: var(--quest-dark);
+}
+
+/* Variações de Conceito */
+.quest-concept-info {
+  border-color: var(--brand-blue-20);
+}
+
+.quest-concept-success {
+  border-color: var(--quest-success);
+}
+
+.quest-concept-magic {
+  border-color: var(--quest-magic);
+}
+
+/* Alertas */
+.quest-alert {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--brand-neutral-0);
+  border: 2px solid;
+  border-radius: var(--radius-lg);
+  margin: var(--space-4) 0;
+  box-shadow: var(--shadow-md);
+}
+
+.quest-alert-icon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-alert-content {
+  flex: 1;
+}
+
+.quest-alert-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-alert-text {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 var(--space-2) 0;
+}
+
+.quest-alert-example {
+  padding: var(--space-2);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-md);
+}
+
+.quest-alert-example strong {
+  display: block;
+  font-weight: 700;
+  margin-bottom: var(--space-1);
+}
+
+/* Variações de Alerta */
+.quest-alert-danger {
+  border-color: var(--quest-danger);
+  background: rgba(249, 79, 72, 0.05);
+}
+
+.quest-alert-danger .quest-alert-title {
+  color: var(--quest-danger);
+}
+
+.quest-alert-warning {
+  border-color: var(--quest-warning);
+  background: rgba(249, 226, 125, 0.05);
+}
+
+.quest-alert-warning .quest-alert-title {
+  color: #c0a445;
+}
+
+.quest-alert-success {
+  border-color: var(--quest-success);
+  background: rgba(120, 157, 74, 0.05);
+}
+
+.quest-alert-success .quest-alert-title {
+  color: var(--quest-success);
+}
+
+/* ========================================
+   TABELAS DE COMPARAÇÃO
+   ======================================== */
+
+.quest-comparison-table {
+  margin: var(--space-4) 0;
+  background: var(--brand-neutral-0);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  padding: var(--space-3);
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-comparison-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-3) 0;
+}
+
+.quest-comparison-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.quest-comparison-table th,
+.quest-comparison-table td {
+  padding: var(--space-2);
+  text-align: left;
+  border-bottom: 1px solid var(--quest-light);
+}
+
+.quest-comparison-table th {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--quest-dark);
+  background: var(--quest-light);
+}
+
+.quest-comparison-table td {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--quest-medium);
+}
+
+.quest-slow {
+  color: var(--quest-danger) !important;
+  font-weight: 500;
+}
+
+.quest-fast {
+  color: var(--quest-success) !important;
+  font-weight: 500;
+}
+
+.quest-comparison-table tfoot td {
+  font-weight: 700;
+  font-size: 16px;
+  border-top: 2px solid var(--quest-dark);
+}
+
+/* ========================================
+   ITENS
+   ======================================== */
+
+.quest-item-card {
+  display: flex;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--brand-neutral-0);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  margin-bottom: var(--space-2);
+  transition: all var(--transition-fast);
+}
+
+.quest-item-card:hover {
+  transform: translateX(4px);
+  border-color: var(--quest-crystal);
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-item-icon {
+  font-size: 32px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.quest-item-content {
+  flex: 1;
+}
+
+.quest-item-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--quest-dark);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-item-desc {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--quest-medium);
+  margin: 0 0 var(--space-1) 0;
+}
+
+.quest-item-obtained {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--quest-success);
+}
+
+/* ========================================
+   LAYOUT GERAL
+   ======================================== */
+
+.quest-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-3) var(--space-4);
+  background: var(--brand-neutral-0);
+  border-bottom: 2px solid var(--quest-light);
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-header-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.quest-logo {
+  height: 32px;
+  width: auto;
+}
+
+.quest-logo-brand {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 700;
+  font-size: 24px;
+  color: var(--brand-aqua-20);
+  background: var(--quest-dark);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-md);
+  letter-spacing: 2px;
+  box-shadow: var(--shadow-md);
+}
+
+.quest-header-title {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--quest-dark);
+}
+
+.quest-header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.player-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding-right: var(--space-2);
+  border-right: 2px solid var(--quest-light);
+}
+
+.player-name-display,
+.player-language {
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+  color: var(--quest-medium);
+  white-space: nowrap;
+}
+
+.quest-user-name {
+  font-family: 'Rubik', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--quest-dark);
+}
+
+.quest-progress-container {
+  padding: var(--space-4);
+  background: linear-gradient(135deg, var(--brand-aqua-0) 0%, var(--brand-navy-0) 100%);
+  border: 2px solid var(--quest-light);
+  border-radius: var(--radius-lg);
+  margin: 0 0 var(--space-5) 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.quest-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-4);
+}
+
+.quest-footer {
+  padding: var(--space-4);
+  background: var(--quest-dark);
+  color: var(--brand-neutral-0);
+  text-align: center;
+  font-family: 'Rubik', sans-serif;
+  font-size: 14px;
+}
+
+/* ========================================
+   UTILITÁRIOS
+   ======================================== */
+
+.quest-mt-1 { margin-top: var(--space-1); }
+.quest-mt-2 { margin-top: var(--space-2); }
+.quest-mt-3 { margin-top: var(--space-3); }
+.quest-mt-4 { margin-top: var(--space-4); }
+
+.quest-mb-1 { margin-bottom: var(--space-1); }
+.quest-mb-2 { margin-bottom: var(--space-2); }
+.quest-mb-3 { margin-bottom: var(--space-3); }
+.quest-mb-4 { margin-bottom: var(--space-4); }
+
+.quest-text-center { text-align: center; }
+.quest-text-right { text-align: right; }
+
+/* ========================================
+   RESPONSIVIDADE
+   ======================================== */
+
+@media (max-width: 768px) {
+  .quest-location-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .quest-location-chapter {
+    margin-top: var(--space-2);
+  }
+  
+  .quest-character-card {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .quest-comparison-table {
+    overflow-x: auto;
+  }
+  
+  .quest-header {
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+  
+  .quest-header-user {
+    flex-direction: column;
+    width: 100%;
+    gap: var(--space-2);
+  }
+  
+  .player-info {
+    border-right: none;
+    border-bottom: 2px solid var(--quest-light);
+    padding-right: 0;
+    padding-bottom: var(--space-2);
+  }
+  
+  .quest-mission-footer {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  
+  .quest-logo-brand {
+    font-size: 20px;
+    padding: 6px var(--space-2);
+  }
+}
+
+/* ========================================
+   ANIMAÇÕES
+   ======================================== */
+
+@keyframes quest-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes quest-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(162, 89, 255, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(162, 89, 255, 0.6); }
+}
+
+.quest-pulse {
+  animation: quest-pulse 2s ease-in-out infinite;
+}
+
+.quest-glow {
+  animation: quest-glow 2s ease-in-out infinite;
+}
+
+/* ========================================
+   FIM DO STYLESHEET
+   ======================================== */
+

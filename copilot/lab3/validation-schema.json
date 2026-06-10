@@ -1,0 +1,338 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "metadata": {
+    "lab": "lab3",
+    "title": "Torre dos GSIs",
+    "version": "2.1.0",
+    "total_xp": 1050,
+    "total_challenges": 8,
+    "duration_minutes": 30,
+    "description": "Global Secondary Indexes: Buscar por qualquer atributo"
+  },
+  "challenges": {
+    "Q1_lab3": {
+      "id": "Q1_lab3",
+      "title": "O que é um GSI?",
+      "chapter": "gsi_basics",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "O que é um Índice Global Secundário (GSI) no DynamoDB?",
+      "options": [
+        "Um índice usado apenas para ordenar os dados da tabela principal",
+        "Um índice que permite consultar dados usando uma nova chave de partição e/ou ordenação",
+        "Uma tabela nova criada automaticamente para cada entidade",
+        "Um recurso utilizado apenas para aumentar a capacidade de escrita"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "GSI permite criar uma 'view' alternativa da tabela com novas chaves de partição e ordenação, possibilitando queries eficientes por atributos que não são PK/SK da tabela principal.\n\n---\n\n❌ **A) Um índice usado apenas para ordenar os dados:**\nGSI não é só para ordenação! Ele permite buscar por novos atributos que não são PK/SK da tabela principal. A ordenação é apenas um dos benefícios.\n\n❌ **C) Uma tabela nova criada automaticamente:**\nGSI não é uma tabela separada! É um índice da mesma tabela que cria uma view alternativa dos dados sem duplicação completa.\n\n❌ **D) Um recurso para aumentar capacidade de escrita:**\nGSI é focado em melhorar queries de leitura, não aumenta capacidade de escrita. Na verdade, escrever no GSI consome WCUs adicionais.",
+      "hints": [
+        "GSI permite criar uma 'view' alternativa da tabela",
+        "Você pode fazer Query em qualquer atributo que seja GSI PK"
+      ],
+      "translations": {
+        "en": {
+          "title": "What is a GSI?",
+          "question": "What is a Global Secondary Index (GSI) in DynamoDB?",
+          "options": [
+            "An index used only to sort data in the main table",
+            "An index that lets you query data using a new partition key and/or sort key",
+            "A new table automatically created for each entity",
+            "A feature used only to increase write capacity"
+          ],
+          "explanation": "A GSI creates an alternative view of the table with different keys, enabling efficient queries by attributes that are not the base table PK/SK.",
+          "hints": ["A GSI creates an alternative view of the table", "You can Query any attribute that is modeled as the GSI PK"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "indexes", "basics"]
+    },
+    "Q2_lab3": {
+      "id": "Q2_lab3",
+      "title": "Para que servem os GSIs?",
+      "chapter": "gsi_purpose",
+      "difficulty": "⭐⭐ Intermediário",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Para que servem os GSIs no DynamoDB?",
+      "options": [
+        "Para substituir totalmente a tabela principal",
+        "Para permitir consultas usando joins entre entidades",
+        "Para criar novos padrões de acesso sem alterar a tabela original",
+        "Para armazenar backups dos dados"
+      ],
+      "correct_answer": "C",
+      "correct_index": 2,
+      "explanation": "GSIs permitem criar novos access patterns sem reestruturar a tabela base, possibilitando queries eficientes em atributos não-PK mantendo o Single Table Design.\n\n---\n\n❌ **A) Para substituir totalmente a tabela principal:**\nGSI complementa a tabela principal, não a substitui! A tabela base continua sendo a fonte primária dos dados.\n\n❌ **B) Para permitir consultas usando joins entre entidades:**\nDynamoDB não tem joins nativos, e GSI não muda isso. GSI apenas permite buscar dados por atributos diferentes.\n\n❌ **D) Para armazenar backups dos dados:**\nGSI é para criar novos padrões de acesso (queries), não para backup. Use AWS Backup ou Point-in-Time Recovery para backups.",
+      "hints": [
+        "Pense nos GSIs como atalhos de busca para responder perguntas diferentes",
+        "GSI complementa a tabela, não substitui"
+      ],
+      "translations": {
+        "en": {
+          "title": "What are GSIs used for?",
+          "question": "What are GSIs used for in DynamoDB?",
+          "options": [
+            "To completely replace the main table",
+            "To allow joins between entities",
+            "To create new access patterns without changing the original table",
+            "To store data backups"
+          ],
+          "explanation": "GSIs let you add new access patterns without redesigning the base table, enabling efficient queries on non-key attributes while keeping Single Table Design.",
+          "hints": ["Think of GSIs as search shortcuts for different questions", "A GSI complements the table; it does not replace it"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "access-patterns", "design"]
+    },
+    "Q3_lab3": {
+      "id": "Q3_lab3",
+      "title": "GSI vs LSI: Diferença Principal",
+      "chapter": "gsi_vs_lsi",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Qual a principal diferença entre GSI e LSI?",
+      "options": [
+        "GSI usa outra capacidade de leitura; LSI não usa capacidade",
+        "GSI permite nova PK; LSI usa a mesma PK da tabela principal",
+        "GSI só pode ser criado na criação da tabela; LSI pode ser criado depois",
+        "LSI replica todos os atributos; GSI não replica nenhum"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "LSI mantém a mesma PK da tabela e apenas troca a Sort Key, enquanto GSI pode ter PK e SK totalmente diferentes, criando novos padrões de acesso.\n\n---\n\n❌ **A) GSI usa outra capacidade de leitura; LSI não usa capacidade:**\nAmbos usam capacidade de leitura! GSI tem capacidade própria configurável, enquanto LSI compartilha a capacidade da tabela principal.\n\n❌ **C) GSI só pode ser criado na criação da tabela; LSI pode ser criado depois:**\nEstá invertido! GSI pode ser criado depois que a tabela já existe, mas LSI só pode ser criado durante a criação da tabela.\n\n❌ **D) LSI replica todos os atributos; GSI não replica nenhum:**\nAmbos permitem escolher quais atributos projetar através das opções KEYS_ONLY, INCLUDE ou ALL.",
+      "hints": [
+        "Um deles muda a Partition Key, o outro não",
+        "LSI = Local (mesma partição), GSI = Global (qualquer partição)"
+      ],
+      "translations": {
+        "en": {
+          "title": "GSI vs LSI: Main Difference",
+          "question": "What is the main difference between GSI and LSI?",
+          "options": [
+            "GSI uses separate read capacity; LSI uses no capacity",
+            "GSI can use a new PK; LSI uses the same PK as the main table",
+            "GSI can only be created when the table is created; LSI can be created later",
+            "LSI replicates all attributes; GSI replicates none"
+          ],
+          "explanation": "An LSI keeps the same PK and changes only the Sort Key. A GSI can use completely different PK and SK values.",
+          "hints": ["One can change the Partition Key, the other cannot", "LSI = local partition, GSI = global access pattern"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "lsi", "indexes", "comparison"]
+    },
+    "Q4_lab3": {
+      "id": "Q4_lab3",
+      "title": "Quando usar LSI ao invés de GSI?",
+      "chapter": "lsi_use_cases",
+      "difficulty": "⭐⭐⭐ Avançado",
+      "xp": 100,
+      "type": "multiple_choice",
+      "question": "Em qual situação um LSI é mais indicado do que um GSI?",
+      "options": [
+        "Quando você precisa ordenar os itens da mesma PK de diferentes formas",
+        "Quando você quer buscar itens por atributos completamente diferentes da tabela",
+        "Quando deseja armazenar grandes volumes de dados fora da tabela",
+        "Quando precisa melhorar a velocidade de escrita"
+      ],
+      "correct_answer": "A",
+      "correct_index": 0,
+      "explanation": "LSI é ideal quando você tem muitos itens dentro da mesma PK e precisa ordená-los por outros atributos. Mantém a mesma PK mas permite SK diferente e strongly consistent reads.\n\n---\n\n❌ **B) Quando você quer buscar itens por atributos completamente diferentes:**\nPara buscar por atributos completamente diferentes você precisa de GSI, que permite definir uma nova PK.\n\n❌ **C) Quando deseja armazenar grandes volumes de dados fora da tabela:**\nLSI não armazena dados 'fora' da tabela! É um índice local que referencia a mesma partição da tabela principal.\n\n❌ **D) Quando precisa melhorar a velocidade de escrita:**\nLSI não melhora velocidade de escrita. Na verdade, compartilha a mesma capacidade de throughput da tabela principal.",
+      "hints": [
+        "LSI = mesma PK, outra ordenação",
+        "Pense em ordenações alternativas dentro da mesma partição"
+      ],
+      "translations": {
+        "en": {
+          "title": "When to Use LSI Instead of GSI",
+          "question": "In which situation is an LSI more appropriate than a GSI?",
+          "options": [
+            "When you need to sort items with the same PK in different ways",
+            "When you want to query items by attributes completely different from the table key",
+            "When you want to store large volumes of data outside the table",
+            "When you need to improve write speed"
+          ],
+          "explanation": "An LSI is useful when many items share the same PK and you need an alternative ordering inside that same logical partition.",
+          "hints": ["LSI = same PK, different ordering", "Think of alternative sorting within the same partition"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["lsi", "indexes", "sorting", "use-cases"]
+    },
+    "Q5_lab3": {
+      "id": "Q5_lab3",
+      "title": "Atualizações Assíncronas do GSI",
+      "chapter": "gsi_async_updates",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 150,
+      "type": "multiple_choice",
+      "question": "Como funciona a atualização dos GSIs quando um item da tabela principal muda?",
+      "options": [
+        "Os GSIs são atualizados instantaneamente e de forma síncrona",
+        "Os GSIs nunca são atualizados automaticamente",
+        "Os GSIs são atualizados de forma assíncrona, podendo ter pequeno atraso",
+        "O desenvolvedor precisa atualizar o GSI manualmente"
+      ],
+      "correct_answer": "C",
+      "correct_index": 2,
+      "explanation": "GSIs são atualizados de forma assíncrona (eventual consistency). As atualizações se propagam em milissegundos (geralmente < 100ms), permitindo alta performance nas escritas.\n\n---\n\n❌ **A) Os GSIs são atualizados instantaneamente e de forma síncrona:**\nNão é síncrono! Isso seria muito lento e caro, prejudicando a performance de escrita da tabela.\n\n❌ **B) Os GSIs nunca são atualizados automaticamente:**\nGSI é atualizado automaticamente pelo DynamoDB. Você não controla quando isso acontece.\n\n❌ **D) O desenvolvedor precisa atualizar o GSI manualmente:**\nA atualização não é manual. O DynamoDB gerencia automaticamente a propagação das mudanças para os GSIs.",
+      "hints": [
+        "Pense na replicação: rápida, mas não imediata",
+        "Eventual consistency é o modelo padrão para GSIs"
+      ],
+      "translations": {
+        "en": {
+          "title": "Asynchronous GSI Updates",
+          "question": "How are GSIs updated when an item in the main table changes?",
+          "options": [
+            "GSIs are updated instantly and synchronously",
+            "GSIs are never updated automatically",
+            "GSIs are updated asynchronously and may have a small delay",
+            "The developer must update the GSI manually"
+          ],
+          "explanation": "GSIs are updated asynchronously with eventual consistency. Updates usually propagate quickly, which keeps writes fast.",
+          "hints": ["Think of replication: fast, but not immediate", "Eventual consistency is the default model for GSIs"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "consistency", "async", "performance"]
+    },
+    "Q6_lab3": {
+      "id": "Q6_lab3",
+      "title": "Eventual Consistency em GSIs",
+      "chapter": "gsi_consistency",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 150,
+      "type": "multiple_choice",
+      "question": "O que pode acontecer ao consultar um GSI logo após atualizar um item na tabela principal?",
+      "options": [
+        "A consulta sempre retorna dados duplicados",
+        "Pode haver um pequeno atraso antes que o índice reflita a alteração",
+        "O GSI pode ser apagado automaticamente",
+        "A tabela principal fica bloqueada até o GSI ser sincronizado"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Devido à eventual consistency, pode haver um delay (normalmente < 100ms) antes que o GSI reflita as atualizações da tabela. Isso é by design, não um bug.\n\n---\n\n❌ **A) A consulta sempre retorna dados duplicados:**\nA consulta não retorna dados duplicados! Ela retorna o dado antigo (antes da atualização) até que a propagação seja concluída.\n\n❌ **C) O GSI pode ser apagado automaticamente:**\nGSI nunca é apagado automaticamente! Ele permanece sincronizado com a tabela através de eventual consistency.\n\n❌ **D) A tabela principal fica bloqueada até o GSI ser sincronizado:**\nA tabela principal não fica bloqueada! As escritas são assíncronas e não aguardam a sincronização do GSI.",
+      "hints": [
+        "Lembre-se: eventual consistency",
+        "Read-after-write pode retornar dado antigo"
+      ],
+      "translations": {
+        "en": {
+          "title": "Eventual Consistency in GSIs",
+          "question": "What can happen when querying a GSI right after updating an item in the main table?",
+          "options": [
+            "The query always returns duplicated data",
+            "There may be a small delay before the index reflects the change",
+            "The GSI may be automatically deleted",
+            "The main table is blocked until the GSI is synchronized"
+          ],
+          "explanation": "Because GSIs are eventually consistent, a query may briefly return older data until the index catches up.",
+          "hints": ["Remember eventual consistency", "Read-after-write may briefly return old data"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "consistency", "eventual", "real-time"]
+    },
+    "Q7_lab3": {
+      "id": "Q7_lab3",
+      "title": "Importância da Partition Key",
+      "chapter": "gsi_partition_key_design",
+      "difficulty": "⭐⭐⭐⭐⭐ Boss",
+      "xp": 150,
+      "type": "multiple_choice",
+      "question": "Por que é importante escolher bem a Partition Key de um GSI?",
+      "options": [
+        "Porque ela define a ordem de inserção dos dados",
+        "Porque uma PK com baixa cardinalidade pode criar hotspots e reduzir performance",
+        "Porque ela impede o uso de Sort Keys",
+        "Porque a PK não pode ser modificada depois"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "PK com baixa cardinalidade (poucos valores distintos) concentra muitos items na mesma partição, criando hot partitions que limitam throughput (3.000 RCU/partição). Alta cardinalidade distribui dados e permite escalar.\n\n---\n\n❌ **A) Porque ela define a ordem de inserção dos dados:**\nPK não define ordem de inserção dos dados! A Sort Key (SK) é quem define a ordenação dos itens.\n\n❌ **C) Porque ela impede o uso de Sort Keys:**\nPK não impede o uso de Sort Keys! GSI pode ter tanto PK quanto SK.\n\n❌ **D) Porque a PK não pode ser modificada depois:**\nPK pode ser modificada recriando o GSI, mas é uma operação cara e demorada, não uma impossibilidade técnica.",
+      "hints": [
+        "Pense no impacto de ter muitos itens com a mesma PK",
+        "Hot partition limita throughput e causa throttling"
+      ],
+      "translations": {
+        "en": {
+          "title": "Partition Key Importance",
+          "question": "Why is it important to choose a GSI Partition Key carefully?",
+          "options": [
+            "Because it defines the insertion order of data",
+            "Because a low-cardinality PK can create hotspots and reduce performance",
+            "Because it prevents using Sort Keys",
+            "Because the PK can never be changed later"
+          ],
+          "explanation": "A low-cardinality PK concentrates many items and requests in the same partition, creating hot partitions and limiting throughput.",
+          "hints": ["Think about many items sharing the same PK", "Hot partitions limit throughput and can cause throttling"]
+        }
+      },
+      "timer_seconds": 90,
+      "tags": ["gsi", "partition-key", "cardinality", "hot-partition", "performance"]
+    },
+    "Q8_lab3": {
+      "id": "Q8_lab3",
+      "title": "Query em GSI HIERARCHY",
+      "chapter": "gsi_hierarchy",
+      "difficulty": "⭐⭐⭐⭐ Expert",
+      "xp": 200,
+      "type": "multiple_choice",
+      "question": "Você deseja obter todos os employees associados a um contrato específico. O índice global HIERARCHY utiliza: Partition key: entity, Sort key: HIERARCHYSK (formato group_id#contract_id). Qual query está correta?",
+      "options": [
+        "Query no HIERARCHY: entity = EMPLOYEE e begins_with(HIERARCHYSK, 'CONTRACT#id')",
+        "Query no HIERARCHY: entity = EMPLOYEE e HIERARCHYSK = 'group_id#contract_id'",
+        "Query direta na tabela: PK = EMPLOYEE e SK iniciando com CONTRACT#id",
+        "Query no GSI1: GSI1PK = EMPLOYEE#id"
+      ],
+      "correct_answer": "B",
+      "correct_index": 1,
+      "explanation": "Usa o índice HIERARCHY correto com entity = EMPLOYEE e HIERARCHYSK seguindo o formato group_id#contract_id. Query eficiente para buscar employees de um grupo+contrato específicos.\n\n---\n\n❌ **A) begins_with(HIERARCHYSK, 'CONTRACT#<id>'):**\nO formato do HIERARCHYSK é `group_id#contract_id`, NÃO começa com `CONTRACT#`! O correto seria `begins_with(HIERARCHYSK, 'GROUP-001#')` para buscar por grupo, não por contrato.\n\n❌ **C) Query direta: PK = EMPLOYEE e SK iniciando com CONTRACT#<id>:**\nPK não é genérico como 'EMPLOYEE', seria algo como `EMPLOYEE#uuid` específico. Você não pode fazer query com PK genérico no DynamoDB - precisa de um valor específico de PK.\n\n❌ **D) Query no GSI1: GSI1PK = EMPLOYEE#<id>:**\nIsso busca um employee ESPECÍFICO por ID, não todos os employees de um contrato! GSI1 tem estrutura diferente e não é otimizado para esse access pattern de hierarquia.",
+      "hints": [
+        "Pense em como a hierarquia está estruturada no HIERARCHYSK",
+        "O formato é group_id#contract_id"
+      ],
+      "translations": {
+        "en": {
+          "title": "Querying the HIERARCHY GSI",
+          "question": "You need all employees associated with a specific contract. The HIERARCHY GSI uses entity as the Partition Key and HIERARCHYSK in the format group_id#contract_id. Which query is correct?",
+          "options": [
+            "Query HIERARCHY with entity = EMPLOYEE and begins_with(HIERARCHYSK, 'CONTRACT#id')",
+            "Query HIERARCHY with entity = EMPLOYEE and HIERARCHYSK = 'group_id#contract_id'",
+            "Query the base table with PK = EMPLOYEE and SK beginning with CONTRACT#id",
+            "Query GSI1 with GSI1PK = EMPLOYEE#id"
+          ],
+          "explanation": "Use the HIERARCHY index with entity = EMPLOYEE and HIERARCHYSK following the group_id#contract_id format for the specific group and contract.",
+          "hints": ["Think about how the hierarchy is encoded in HIERARCHYSK", "The format is group_id#contract_id"]
+        }
+      },
+      "timer_seconds": 120,
+      "tags": ["gsi", "hierarchy", "query", "access-pattern"]
+    }
+  },
+  "progression": {
+    "order": ["Q1_lab3", "Q2_lab3", "Q3_lab3", "Q4_lab3", "Q5_lab3", "Q6_lab3", "Q7_lab3", "Q8_lab3"],
+    "prerequisites": {
+      "Q1_lab3": [],
+      "Q2_lab3": ["Q1_lab3"],
+      "Q3_lab3": ["Q1_lab3", "Q2_lab3"],
+      "Q4_lab3": ["Q3_lab3"],
+      "Q5_lab3": ["Q3_lab3"],
+      "Q6_lab3": ["Q5_lab3"],
+      "Q7_lab3": ["Q3_lab3", "Q5_lab3", "Q6_lab3"],
+      "Q8_lab3": ["Q3_lab3"]
+    }
+  },
+  "scoring": {
+    "total_xp": 1050,
+    "passing_score": 570,
+    "perfect_score": 1050,
+    "time_bonus": true,
+    "hint_penalty": 15
+  }
+}

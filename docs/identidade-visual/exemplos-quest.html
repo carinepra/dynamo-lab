@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aurora Academy: Quest DynamoDB - Exemplos Visuais</title>
+  <link rel="stylesheet" href="componentes-quest.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f7fa;
+      font-family: 'Rubik', sans-serif;
+    }
+    
+    .demo-section {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 48px 24px;
+    }
+    
+    .demo-section-title {
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      color: #002740;
+      margin: 0 0 32px 0;
+      padding-bottom: 16px;
+      border-bottom: 3px solid #67d2df;
+    }
+    
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+    
+    .demo-item {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0, 39, 64, 0.1);
+    }
+    
+    .demo-item-title {
+      font-family: 'Rubik', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #002740;
+      margin: 0 0 16px 0;
+    }
+    
+    .demo-spacer {
+      height: 48px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========================================
+       HEADER PRINCIPAL
+       ======================================== -->
+  <header class="quest-header">
+    <div class="quest-header-brand">
+      <div style="width: 100px; height: 32px; background: #002740; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 14px;">AURORA LABS</div>
+      <span class="quest-header-title">Academy: Quest DynamoDB</span>
+    </div>
+    <div class="quest-header-user">
+      <div class="quest-level-badge quest-level-silver">
+        <span class="quest-level-emoji">🗺️</span>
+        <span class="quest-level-name">Cartógrafo</span>
+        <span class="quest-level-xp">750 / 1.000 XP</span>
+      </div>
+      <span class="quest-user-name">João Silva</span>
+    </div>
+  </header>
+
+  <!-- ========================================
+       BARRA DE PROGRESSO
+       ======================================== -->
+  <div class="quest-progress-container">
+    <div class="quest-xp-bar">
+      <div class="quest-xp-bar-header">
+        <span class="quest-xp-current">750 XP</span>
+        <span class="quest-xp-target">/ 1.000 XP</span>
+        <span class="quest-xp-next">Faltam 250 XP para Senior!</span>
+      </div>
+      <div class="quest-xp-bar-track">
+        <div class="quest-xp-bar-fill" style="width: 75%"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================
+       CONTEÚDO PRINCIPAL
+       ======================================== -->
+  <main class="quest-main">
+
+    <!-- SEÇÃO 1: NÍVEIS E XP -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">📊 Sistema de Níveis e XP</h2>
+      
+      <div class="demo-grid">
+        <div class="demo-item">
+          <h3 class="demo-item-title">Nível 1: Escudeiro 🛡️</h3>
+          <div class="quest-level-badge quest-level-bronze">
+            <span class="quest-level-emoji">🛡️</span>
+            <span class="quest-level-name">Escudeiro</span>
+            <span class="quest-level-xp">350 / 500 XP</span>
+          </div>
+          <p style="font-size: 12px; color: #546c7e; margin-top: 8px;">Aprendiz dos fundamentos</p>
+        </div>
+        
+        <div class="demo-item">
+          <h3 class="demo-item-title">Nível 2: Cartógrafo 🗺️</h3>
+          <div class="quest-level-badge quest-level-silver">
+            <span class="quest-level-emoji">🗺️</span>
+            <span class="quest-level-name">Cartógrafo</span>
+            <span class="quest-level-xp">750 / 1.000 XP</span>
+          </div>
+          <p style="font-size: 12px; color: #546c7e; margin-top: 8px;">Explorador de patterns</p>
+        </div>
+        
+        <div class="demo-item">
+          <h3 class="demo-item-title">Nível 3: Cavaleiro ⚔️</h3>
+          <div class="quest-level-badge quest-level-gold">
+            <span class="quest-level-emoji">⚔️</span>
+            <span class="quest-level-name">Cavaleiro</span>
+            <span class="quest-level-xp">1.200 / 1.500 XP</span>
+          </div>
+          <p style="font-size: 12px; color: #546c7e; margin-top: 8px;">Guardião dos dados</p>
+        </div>
+        
+        <div class="demo-item">
+          <h3 class="demo-item-title">Nível 4: Oráculo 🔮</h3>
+          <div class="quest-level-badge quest-level-principal">
+            <span class="quest-level-emoji">🔮</span>
+            <span class="quest-level-name">Oráculo</span>
+            <span class="quest-level-xp">1.800 / 2.000 XP</span>
+          </div>
+          <p style="font-size: 12px; color: #546c7e; margin-top: 8px;">Sábio arquiteto</p>
+        </div>
+        
+        <div class="demo-item">
+          <h3 class="demo-item-title">Nível 5: Grão-Mestre 👑</h3>
+          <div class="quest-level-badge quest-level-legend">
+            <span class="quest-level-emoji">👑</span>
+            <span class="quest-level-name">Grão-Mestre</span>
+            <span class="quest-level-xp">2.100 XP</span>
+          </div>
+          <p style="font-size: 12px; color: #546c7e; margin-top: 8px;">Arquiteto-Mor supremo</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 2: LOCAIS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">🏛️ Locais da Quest</h2>
+      
+      <div class="quest-location-header quest-location-academia">
+        <div class="quest-location-icon">🏛️</div>
+        <div class="quest-location-info">
+          <h2 class="quest-location-name">Academia dos Fundamentos</h2>
+          <p class="quest-location-desc">Aprenda os 3 Feitiços Fundamentais do DynamoDB</p>
+        </div>
+        <div class="quest-location-chapter">Capítulo 1</div>
+      </div>
+      
+      <div class="demo-spacer"></div>
+      
+      <div class="quest-location-header quest-location-templo">
+        <div class="quest-location-icon">⛩️</div>
+        <div class="quest-location-info">
+          <h2 class="quest-location-name">Templo das Decisões Pragmáticas</h2>
+          <p class="quest-location-desc">Aprenda sobre desnormalização e trade-offs inteligentes</p>
+        </div>
+        <div class="quest-location-chapter">Capítulo 2</div>
+      </div>
+      
+      <div class="demo-spacer"></div>
+      
+      <div class="quest-location-header quest-location-castelo">
+        <div class="quest-location-icon">🏰</div>
+        <div class="quest-location-info">
+          <h2 class="quest-location-name">Castelo da Escala</h2>
+          <p class="quest-location-desc">Enfrente o desafio do Single-Table Design</p>
+        </div>
+        <div class="quest-location-chapter">Capítulo 3</div>
+      </div>
+      
+      <div class="demo-spacer"></div>
+      
+      <div class="quest-location-header quest-location-torre">
+        <div class="quest-location-icon">🗼</div>
+        <div class="quest-location-info">
+          <h2 class="quest-location-name">Torre dos Índices Globais</h2>
+          <p class="quest-location-desc">Domine os Global Secondary Indexes (GSIs)</p>
+        </div>
+        <div class="quest-location-chapter">Capítulo 4</div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 3: PERSONAGENS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">🎭 Personagens</h2>
+      
+      <h3 style="font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 20px; color: #002740; margin: 0 0 16px 0;">
+        Protagonistas (Colaboradores da Aurora Labs)
+      </h3>
+      <p style="font-family: 'Rubik', sans-serif; font-size: 14px; color: #546c7e; margin-bottom: 24px;">
+        Os alunos/jogadores do treinamento, representando colaboradores reais da Aurora Labs:
+      </p>
+      
+      <div class="demo-grid">
+        <div class="quest-character-card quest-character-zelda">
+          <div class="quest-character-avatar">👩</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Zelda</h3>
+            <p class="quest-character-role">Colaboradora Individual</p>
+            <ul class="quest-character-stats">
+              <li>📋 1 Plano Individual</li>
+              <li>🎖️ 2 Certificados</li>
+              <li>💰 R$ 3.425,00</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="quest-character-card quest-character-link">
+          <div class="quest-character-avatar">👨</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Link</h3>
+            <p class="quest-character-role">Colaborador Tech Corp</p>
+            <ul class="quest-character-stats">
+              <li>📋 2 Planos Corporativos</li>
+              <li>🎖️ 3 Certificados</li>
+              <li>💰 R$ 63.490,00</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      
+      <div style="height: 48px;"></div>
+      
+      <h3 style="font-family: 'Rubik', sans-serif; font-weight: 700; font-size: 20px; color: #002740; margin: 0 0 16px 0;">
+        NPCs e Mentores (Sistema de Níveis)
+      </h3>
+      <p style="font-family: 'Rubik', sans-serif; font-size: 14px; color: #546c7e; margin-bottom: 24px;">
+        Personagens que representam os níveis de conhecimento e guiam os protagonistas:
+      </p>
+      
+      <div class="demo-grid">
+        <div class="quest-character-card" style="border-color: #c0a445;">
+          <div class="quest-character-avatar">🛡️</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Escudeiro</h3>
+            <p class="quest-character-role">Nível: Aprendiz (0-500 XP)</p>
+            <ul class="quest-character-stats">
+              <li>📚 Aprendendo fundamentos</li>
+              <li>🎯 Focado em GetItem</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="quest-character-card" style="border-color: #abbdc8;">
+          <div class="quest-character-avatar">🗺️</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Cartógrafo</h3>
+            <p class="quest-character-role">Nível: Explorador (501-1.000 XP)</p>
+            <ul class="quest-character-stats">
+              <li>🗺️ Mapeia access patterns</li>
+              <li>🎯 Domina Query</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="quest-character-card" style="border-color: #f9e27d;">
+          <div class="quest-character-avatar">⚔️</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Cavaleiro</h3>
+            <p class="quest-character-role">Nível: Guardião (1.001-1.500 XP)</p>
+            <ul class="quest-character-stats">
+              <li>🛡️ Protege os dados</li>
+              <li>🎯 Single-Table Design</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="quest-character-card" style="border-color: #67d2df;">
+          <div class="quest-character-avatar">🔮</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Oráculo</h3>
+            <p class="quest-character-role">Nível: Sábio (1.501-2.000 XP)</p>
+            <ul class="quest-character-stats">
+              <li>🔮 Arquiteto de soluções</li>
+              <li>🎯 Domina GSIs</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="quest-character-card quest-character-wizard">
+          <div class="quest-character-avatar">👑</div>
+          <div class="quest-character-info">
+            <h3 class="quest-character-name">Arquiteto-Mor</h3>
+            <p class="quest-character-role">Nível: Grão-Mestre (2.001+ XP)</p>
+            <ul class="quest-character-stats">
+              <li>👑 Mestre supremo</li>
+              <li>⚡ Domina tudo</li>
+              <li>🎯 Mentor principal</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 4: MISSÕES -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">⚔️ Missões</h2>
+      
+      <div class="quest-mission-card quest-mission-in-progress">
+        <div class="quest-mission-header">
+          <div class="quest-mission-number">Missão 1</div>
+          <div class="quest-mission-difficulty">
+            <span>⭐⭐</span>
+            <span>Intermediária</span>
+          </div>
+        </div>
+        
+        <div class="quest-mission-content">
+          <h3 class="quest-mission-title">Home do App da Zelda</h3>
+          <p class="quest-mission-desc">
+            Zelda faz login no app. Você precisa mostrar seus dados básicos 
+            na tela inicial usando GetItem.
+          </p>
+          
+          <ul class="quest-mission-objectives">
+            <li class="quest-objective-done">✅ Entender GetItem</li>
+            <li class="quest-objective-done">✅ Escrever query</li>
+            <li class="quest-objective-pending">⏳ Validar resultado</li>
+          </ul>
+        </div>
+        
+        <div class="quest-mission-footer">
+          <span class="quest-mission-xp">+150 XP</span>
+          <button class="quest-mission-btn">Continuar Missão</button>
+        </div>
+      </div>
+      
+      <div class="quest-mission-card quest-mission-completed">
+        <div class="quest-mission-header">
+          <div class="quest-mission-number">Missão 2</div>
+          <div class="quest-mission-difficulty">
+            <span>⭐⭐⭐</span>
+            <span>Avançada</span>
+          </div>
+        </div>
+        
+        <div class="quest-mission-content">
+          <h3 class="quest-mission-title">Planos da Zelda</h3>
+          <p class="quest-mission-desc">
+            Liste todos os planos de benefícios da Zelda usando Query com begins_with.
+          </p>
+          
+          <ul class="quest-mission-objectives">
+            <li class="quest-objective-done">✅ Entender Query</li>
+            <li class="quest-objective-done">✅ Usar begins_with</li>
+            <li class="quest-objective-done">✅ Validar resultado</li>
+          </ul>
+        </div>
+        
+        <div class="quest-mission-footer">
+          <span class="quest-mission-xp">+200 XP</span>
+          <button class="quest-mission-btn" disabled>Completa ✓</button>
+        </div>
+      </div>
+      
+      <div class="quest-mission-card quest-mission-pending">
+        <div class="quest-mission-header">
+          <div class="quest-mission-number">Missão 3</div>
+          <div class="quest-mission-difficulty">
+            <span>⭐⭐⭐⭐⭐</span>
+            <span>BOSS</span>
+          </div>
+        </div>
+        
+        <div class="quest-mission-content">
+          <h3 class="quest-mission-title">Último Saldo (Query Reversa)</h3>
+          <p class="quest-mission-desc">
+            Use a magia da Query Reversa (ScanIndexForward=false) para buscar 
+            o último saldo sem ORDER BY.
+          </p>
+          
+          <ul class="quest-mission-objectives">
+            <li class="quest-objective-pending">⏳ Entender Query Reversa</li>
+            <li class="quest-objective-pending">⏳ Implementar solução</li>
+            <li class="quest-objective-pending">⏳ Derrotar o BOSS</li>
+          </ul>
+        </div>
+        
+        <div class="quest-mission-footer">
+          <span class="quest-mission-xp">+500 XP</span>
+          <button class="quest-mission-btn">Iniciar Missão</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 5: DIÁLOGOS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">💬 Diálogos</h2>
+      
+      <div class="quest-dialogue-box quest-dialogue-wizard">
+        <div class="quest-dialogue-avatar">🧙</div>
+        <div class="quest-dialogue-content">
+          <div class="quest-dialogue-name">Arquiteto-Mor</div>
+          <p class="quest-dialogue-text">
+            "Bem-vindos ao Reino da Aurora Labs! Antes de começar, precisam entender: 
+            SQL NÃO é nosso inimigo! Nosso sistema usa banco relacional MySQL 
+            e funciona MUITO BEM para transações, relatórios e auditorias."
+          </p>
+        </div>
+      </div>
+      
+      <div class="quest-dialogue-box quest-dialogue-zelda">
+        <div class="quest-dialogue-avatar">👩</div>
+        <div class="quest-dialogue-content">
+          <div class="quest-dialogue-name">Zelda</div>
+          <p class="quest-dialogue-text">
+            "Entendi! Então vamos usar DynamoDB apenas para casos específicos 
+            de alta escala, como a home do app que tem 100k requests por dia?"
+          </p>
+        </div>
+      </div>
+      
+      <div class="quest-dialogue-box quest-dialogue-link">
+        <div class="quest-dialogue-avatar">👨</div>
+        <div class="quest-dialogue-content">
+          <div class="quest-dialogue-name">Link</div>
+          <p class="quest-dialogue-text">
+            "Incrível! No meu caso com 2 planos e 3 certificados, a query 
+            levava 730ms com 10 JOINs. Agora com DynamoDB são apenas 25ms!"
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 6: CONCEITOS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">💡 Conceitos e Explicações</h2>
+      
+      <div class="quest-concept-box quest-concept-info">
+        <div class="quest-concept-icon">✨</div>
+        <div class="quest-concept-content">
+          <h4 class="quest-concept-title">Feitiço 1: GetItem - Invocação Direta</h4>
+          <p class="quest-concept-desc">
+            Busca 1 item EXATO quando você sabe a Partition Key (PK) e Sort Key (SK). 
+            É a operação mais rápida e eficiente do DynamoDB.
+          </p>
+          <div class="quest-concept-stats">
+            <span>⚡ Velocidade: 2-5ms</span>
+            <span>💰 Custo: 1 RCU</span>
+            <span>♾️ Escalabilidade: Infinita</span>
+          </div>
+          <div class="quest-concept-example">
+            <code>PK = "EMPLOYEE#660e8400..." SK = "SUMMARY"</code>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quest-concept-box quest-concept-success">
+        <div class="quest-concept-icon">🌊</div>
+        <div class="quest-concept-content">
+          <h4 class="quest-concept-title">Feitiço 2: Query - Busca Hierárquica</h4>
+          <p class="quest-concept-desc">
+            Busca VÁRIOS itens relacionados usando PK + condição na SK. 
+            Perfeito para listar planos, certificados e históricos.
+          </p>
+          <div class="quest-concept-stats">
+            <span>⚡ Velocidade: 3-8ms</span>
+            <span>💰 Custo: 1 RCU / 4KB</span>
+            <span>♾️ Escalabilidade: Infinita</span>
+          </div>
+          <div class="quest-concept-example">
+            <code>PK = "EMPLOYEE#uuid" SK begins_with "PLAN#"</code>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quest-concept-box quest-concept-magic">
+        <div class="quest-concept-icon">⭐</div>
+        <div class="quest-concept-content">
+          <h4 class="quest-concept-title">Query Reversa: O Segredo do Último Saldo</h4>
+          <p class="quest-concept-desc">
+            Use ScanIndexForward=false para começar do FIM da ordenação. 
+            Com Limit=1, você pega o ÚLTIMO item sem precisar de ORDER BY!
+          </p>
+          <div class="quest-concept-stats">
+            <span>⚡ 50x mais rápido que SQL</span>
+            <span>🎯 Usado na Aurora Labs</span>
+            <span>🔥 Pattern crítico</span>
+          </div>
+          <div class="quest-concept-example">
+            <code>ScanIndexForward=false + Limit=1</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 7: ALERTAS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">⚠️ Alertas e Avisos</h2>
+      
+      <div class="quest-alert quest-alert-danger">
+        <div class="quest-alert-icon">⚠️</div>
+        <div class="quest-alert-content">
+          <h4 class="quest-alert-title">Magia Proibida: Scan em Produção</h4>
+          <p class="quest-alert-text">
+            Nunca use Scan em APIs de produção! Lê TODOS os registros da tabela, 
+            é extremamente caro e pode travar o sistema.
+          </p>
+          <div class="quest-alert-example">
+            <strong>História de Terror Real:</strong>
+            <p>Um dev fez Scan em produção. Budget AWS: R$ 200 → R$ 8.000. 
+            Tabela travou por 2 horas. RIP sua carreira. 💀</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="quest-alert quest-alert-warning">
+        <div class="quest-alert-icon">💡</div>
+        <div class="quest-alert-content">
+          <h4 class="quest-alert-title">Atenção: Desnormalização é Trade-off</h4>
+          <p class="quest-alert-text">
+            Duplicar dados melhora MUITO as leituras (730ms → 25ms), mas complica 
+            as escritas. Vale a pena quando você tem milhares de leituras e poucos 
+            updates (ex: nome da empresa muda 2x/mês).
+          </p>
+        </div>
+      </div>
+      
+      <div class="quest-alert quest-alert-success">
+        <div class="quest-alert-icon">✅</div>
+        <div class="quest-alert-content">
+          <h4 class="quest-alert-title">Boa Prática: Access Pattern First</h4>
+          <p class="quest-alert-text">
+            Em DynamoDB, você modela pelos USOS (como vai buscar), não pelas 
+            entidades. Pergunte sempre: "Como vou usar estes dados?" antes de 
+            definir PK e SK.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 8: COMPARAÇÃO -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">⚖️ Comparações: SQL vs DynamoDB</h2>
+      
+      <div class="quest-comparison-table">
+        <h3 class="quest-comparison-title">Home do App Completa do Colaborador</h3>
+        
+        <table>
+          <thead>
+            <tr>
+              <th>Operação</th>
+              <th>🐌 SQL (MySQL)</th>
+              <th>⚡ DynamoDB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Buscar dados do employee</td>
+              <td class="quest-slow">280ms (6 JOINs)</td>
+              <td class="quest-fast">3ms (GetItem)</td>
+            </tr>
+            <tr>
+              <td>Listar planos</td>
+              <td class="quest-slow">180ms (2 JOINs)</td>
+              <td class="quest-fast">5ms (Query)</td>
+            </tr>
+            <tr>
+              <td>Listar certificados</td>
+              <td class="quest-slow">200ms (4 JOINs)</td>
+              <td class="quest-fast">6ms (Query)</td>
+            </tr>
+            <tr>
+              <td>Último saldo</td>
+              <td class="quest-slow">150ms (ORDER BY)</td>
+              <td class="quest-fast">3ms (Query reversa)</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr>
+              <td><strong>Total</strong></td>
+              <td class="quest-slow"><strong>730ms 💀</strong></td>
+              <td class="quest-fast"><strong>25ms 🚀 (29x mais rápido!)</strong></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 9: CONQUISTAS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">🏆 Conquistas Desbloqueadas</h2>
+      
+      <div class="demo-grid">
+        <div class="quest-achievement">
+          <div class="quest-achievement-icon">🎓</div>
+          <div class="quest-achievement-content">
+            <h4 class="quest-achievement-title">Estudante dos Fundamentos</h4>
+            <p class="quest-achievement-desc">
+              Completou a Academia e aprendeu GetItem, Query e Scan
+            </p>
+            <span class="quest-achievement-xp">+300 XP</span>
+          </div>
+        </div>
+        
+        <div class="quest-achievement">
+          <div class="quest-achievement-icon">⚡</div>
+          <div class="quest-achievement-content">
+            <h4 class="quest-achievement-title">Mestre da Query Reversa</h4>
+            <p class="quest-achievement-desc">
+              Usou ScanIndexForward=false para buscar último saldo
+            </p>
+            <span class="quest-achievement-xp">+500 XP</span>
+          </div>
+        </div>
+        
+        <div class="quest-achievement">
+          <div class="quest-achievement-icon">🗺️</div>
+          <div class="quest-achievement-content">
+            <h4 class="quest-achievement-title">Arquiteto de Access Patterns</h4>
+            <p class="quest-achievement-desc">
+              Desenhou 11 access patterns corretamente
+            </p>
+            <span class="quest-achievement-xp">+1.000 XP</span>
+          </div>
+        </div>
+        
+        <div class="quest-achievement">
+          <div class="quest-achievement-icon">👑</div>
+          <div class="quest-achievement-content">
+            <h4 class="quest-achievement-title">Expert em DynamoDB</h4>
+            <p class="quest-achievement-desc">
+              Completou todos os capítulos da Quest com sucesso
+            </p>
+            <span class="quest-achievement-xp">+2.000 XP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEÇÃO 10: ITENS -->
+    <div class="demo-section">
+      <h2 class="demo-section-title">🎁 Itens Coletados</h2>
+      
+      <div class="demo-grid">
+        <div class="quest-item-card">
+          <div class="quest-item-icon">📖</div>
+          <div class="quest-item-content">
+            <h4 class="quest-item-name">Tomo do DynamoDB</h4>
+            <p class="quest-item-desc">
+              Grimório contendo os fundamentos de GetItem, Query e Scan
+            </p>
+            <span class="quest-item-obtained">Obtido no Cap. 1</span>
+          </div>
+        </div>
+        
+        <div class="quest-item-card">
+          <div class="quest-item-icon">🔮</div>
+          <div class="quest-item-content">
+            <h4 class="quest-item-name">Amuleto da Desnormalização</h4>
+            <p class="quest-item-desc">
+              Permite entender trade-offs e duplicar dados com sabedoria
+            </p>
+            <span class="quest-item-obtained">Obtido no Cap. 2</span>
+          </div>
+        </div>
+        
+        <div class="quest-item-card">
+          <div class="quest-item-icon">💎</div>
+          <div class="quest-item-content">
+            <h4 class="quest-item-name">Cristal de Performance</h4>
+            <p class="quest-item-desc">
+              Concede maestria em queries e access patterns otimizados
+            </p>
+            <span class="quest-item-obtained">Obtido no Cap. 3</span>
+          </div>
+        </div>
+        
+        <div class="quest-item-card">
+          <div class="quest-item-icon">🔑</div>
+          <div class="quest-item-content">
+            <h4 class="quest-item-name">Chave dos GSIs</h4>
+            <p class="quest-item-desc">
+              Desbloqueia o poder dos Global Secondary Indexes
+            </p>
+            <span class="quest-item-obtained">Obtido no Cap. 4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ========================================
+       FOOTER
+       ======================================== -->
+  <footer class="quest-footer">
+    <p>
+      <strong>Aurora Academy: Quest DynamoDB</strong> | 
+      Novembro 2025 | 
+      Material de Treinamento Técnico
+    </p>
+  </footer>
+
+</body>
+</html>
+

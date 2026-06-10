@@ -1,0 +1,74 @@
+{
+  "id": "lab1",
+  "icon": "🏛️",
+  "title": "CAPÍTULO 1: ACADEMIA DOS FUNDAMENTOS",
+  "subtitle": "A Ponte Entre Dois Mundos - Onde Toda Jornada Começa",
+  "narrator": "🧙 MESTRE DOS CONCEITOS: \"SQL é poderoso! Mas hoje vamos dominar DynamoDB para casos de alta escala! Antes de tudo, os 15 Feitiços Fundamentais!\"",
+  "highlights": [
+    "✨ SQL vs NoSQL (JOINs, schema flexível, performance)",
+    "🔑 DynamoDB Core (PK, SK, HASH/RANGE, limite 400KB)",
+    "📊 Partições (lógica vs física, hot partitions, distribuição por hash)",
+    "⚡ Operações (GetItem, Query, Scan, begins_with, Batch)"
+  ],
+  "missions": [
+    "Q1: JOINs e Relacionamentos (SQL vs NoSQL)",
+    "Q2: Schema Flexível vs Rígido",
+    "Q3: Performance e Escalabilidade",
+    "Q4: O que é DynamoDB?",
+    "Q5: Partition Key e Partições",
+    "Q6: Partições Lógicas vs Físicas",
+    "Q7: Distribuição por Hash",
+    "Q8: Hot Partitions",
+    "Q9: PK vs PK+SK",
+    "Q10: GetItem vs Query",
+    "Q11: Por que Query por PK é rápida",
+    "Q12: Query com begins_with",
+    "Q13: Quando usar Scan",
+    "Q14: Limite de Query (1 MB)",
+    "Q15: Limite de BatchWriteItem (25 items)"
+  ],
+  "details": {
+    "time": "~45 minutos",
+    "xp": "1.500 XP",
+    "type": "Múltipla escolha",
+    "badge": "🎓 \"Estudante dos Fundamentos\""
+  },
+  "translations": {
+    "en": {
+      "title": "CHAPTER 1: FOUNDATIONS ACADEMY",
+      "subtitle": "The Bridge Between Two Worlds - Where Every Journey Begins",
+      "narrator": "🧙 MASTER OF CONCEPTS: \"SQL is powerful! But today we will master DynamoDB for high-scale use cases. First, the 15 Fundamental Spells!\"",
+      "highlights": [
+        "✨ SQL vs NoSQL (JOINs, flexible schema, performance)",
+        "🔑 DynamoDB Core (PK, SK, HASH/RANGE, 400KB limit)",
+        "📊 Partitions (logical vs physical, hot partitions, hash distribution)",
+        "⚡ Operations (GetItem, Query, Scan, begins_with, Batch)"
+      ],
+      "missions": [
+        "Q1: JOINs and Relationships (SQL vs NoSQL)",
+        "Q2: Flexible vs Rigid Schema",
+        "Q3: Performance and Scalability",
+        "Q4: What is DynamoDB?",
+        "Q5: Partition Key and Partitions",
+        "Q6: Logical vs Physical Partitions",
+        "Q7: Hash Distribution",
+        "Q8: Hot Partitions",
+        "Q9: PK vs PK+SK",
+        "Q10: GetItem vs Query",
+        "Q11: Why Query by PK is Fast",
+        "Q12: Query with begins_with",
+        "Q13: When to Use Scan",
+        "Q14: Query Limit (1 MB)",
+        "Q15: BatchWriteItem Limit (25 items)"
+      ],
+      "details": {
+        "time": "~45 minutes",
+        "type": "Multiple choice",
+        "badge": "🎓 \"Foundations Student\""
+      }
+    }
+  },
+  "unlockRequirement": null,
+  "lab": "lab1"
+}
+

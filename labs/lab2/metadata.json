@@ -1,0 +1,69 @@
+{
+  "id": "lab2",
+  "icon": "⚔️",
+  "title": "CAPÍTULO 2: ARENA DOS PATTERNS",
+  "subtitle": "Onde Heróis Provam Seu Valor - Domine a Arte da Tabela Única",
+  "narrator": "🧙 MESTRE ARQUITETO: \"Agora que domina os fundamentos, é hora de construir! Access patterns, hierarquias, queries avançadas - tudo em uma única tabela!\"",
+  "highlights": [
+    "🎨 Arquitetura (Access Pattern First, Hierarquias, Denormalização)",
+    "🎩 Single Table Magic (1 Query = múltiplos tipos)",
+    "⚡ Queries Avançadas (Ordenação, Ranges, Limit, Filter)",
+    "🔥 Séries Temporais (Query Reversa, histórico)"
+  ],
+  "missions": [
+    "Q1: Access Pattern First",
+    "Q2: Single Table Design",
+    "Q3: Hierarquias 1-to-Many",
+    "Q4: Denormalização",
+    "Q5: Problema N+1",
+    "Q6: Ordenação de Resultados",
+    "Q7: Buscar Range de Dados",
+    "Q8: Limitar Quantidade de Resultados",
+    "Q9: Filtrar por Atributos Não-Chave",
+    "Q10: Home do App Completa",
+    "Q11: Detalhes Completos do Plano",
+    "Q12: Buscar Último Saldo",
+    "Q13: Histórico dos Últimos Meses"
+  ],
+  "details": {
+    "time": "~50 minutos",
+    "xp": "1.870 XP",
+    "type": "Múltipla escolha",
+    "badge": "🎩 \"Arquiteto Single Table\""
+  },
+  "translations": {
+    "en": {
+      "title": "CHAPTER 2: PATTERNS ARENA",
+      "subtitle": "Where Heroes Prove Their Skill - Master the Art of the Single Table",
+      "narrator": "🧙 MASTER ARCHITECT: \"Now that you know the foundations, it is time to build. Access patterns, hierarchies, advanced queries - all in one table!\"",
+      "highlights": [
+        "🎨 Architecture (Access Pattern First, Hierarchies, Denormalization)",
+        "🎩 Single Table Magic (1 Query = multiple item types)",
+        "⚡ Advanced Queries (Ordering, Ranges, Limit, Filter)",
+        "🔥 Time Series (Reverse Query, history)"
+      ],
+      "missions": [
+        "Q1: Access Pattern First",
+        "Q2: Single Table Design",
+        "Q3: 1-to-Many Hierarchies",
+        "Q4: Denormalization",
+        "Q5: N+1 Problem",
+        "Q6: Result Ordering",
+        "Q7: Query a Data Range",
+        "Q8: Limit Result Count",
+        "Q9: Filter by Non-Key Attributes",
+        "Q10: Complete App Home",
+        "Q11: Full Plan Details",
+        "Q12: Find Latest Balance",
+        "Q13: Last Months History"
+      ],
+      "details": {
+        "time": "~50 minutes",
+        "type": "Multiple choice",
+        "badge": "🎩 \"Single Table Architect\""
+      }
+    }
+  },
+  "unlockRequirement": "lab1",
+  "lab": "lab2"
+}
