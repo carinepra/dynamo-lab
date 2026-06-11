@@ -203,6 +203,7 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+.cursor/
 
 # Marimo
 marimo/_static/
@@ -239,3 +240,7 @@ quiz-web/test-results/
 quiz-web/playwright-report/
 quiz-web/*.tmp
 quiz-web/*.temp
+
+
+#Tools
+./tools/
